@@ -1,0 +1,17 @@
+# LangGraph rebuild stack. Use in a separate venv to avoid conflict with legacy langchain 0.1.x.
+# Install: pip install -r requirements-agent.txt
+# Run the app with this venv when using the new agent/graph code.
+langchain>=0.2
+langchain-core>=0.2
+langchain-openai>=0.2
+langchain-anthropic>=0.2
+langgraph>=0.2
+streamlit>=1.34
+tqdm>=4.66
+graphviz>=0.20
+python-pptx>=0.6
+pandasql>=0.7
+tabulate>=0.9
+gnews>=0.3
+beautifulsoup4>=4.12
+fake-useragent>=1.5

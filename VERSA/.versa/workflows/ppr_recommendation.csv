@@ -1,0 +1,896 @@
+LOGO,CATEGORY,RANK,ITEM_ID,IS_NEW
+default,Bags,1,SM-7427,false
+default,Bags,2,SM-7412,false
+default,Bags,3,SM-7548,false
+default,Bags,4,7901-06,false
+default,Bags,5,SM-7346,false
+default,Bags,6,SM-7353,false
+default,Bags,7,3450-34,false
+default,Bags,8,SM-5819,false
+default,Bags,9,4200-21,false
+default,Bags,10,SM-7403,false
+default,Bags,11,SM-7500,false
+default,Bags,12,SM-7431,false
+default,Bags,13,2180-21,false
+default,Bags,14,SM-5830,false
+default,Bags,15,0011-45,false
+default,Bags,16,5790-04,false
+default,Bags,17,SM-7329,false
+default,Bags,18,3750-07,false
+default,Bags,19,SM-7062,false
+default,Bags,20,3750-16,false
+default,Bags,21,3450-38,false
+default,Bags,22,SM-7766,false
+default,Bags,23,7901-07,false
+default,Bags,24,SM-5779,false
+default,Bags,25,SM-7453,false
+default,Bags,26,SM-7102,false
+default,Bags,27,SM-7236,false
+default,Bags,28,SM-7793,false
+default,Bags,29,SM-5892,false
+default,Bags,30,SM-7440,false
+default,Bags,31,SM-7126,false
+default,Bags,32,2301-42,false
+default,Bags,33,SM-7725,false
+default,Bags,34,3750-10,false
+default,Bags,35,SM-7434,false
+default,Bags,36,SM-7779,false
+default,Bags,37,SM-7333,false
+default,Bags,38,2180-10,false
+default,Bags,39,SM-7556,false
+default,Bags,40,SM-5715,false
+default,Bags,41,SM-7314,false
+default,Bags,42,SM-7325,false
+default,Bags,43,8050-37,false
+default,Bags,44,SM-7344,false
+default,Bags,45,2020-01,false
+default,Bags,46,3850-21,false
+default,Bags,47,SM-7420,false
+default,Bags,48,3450-15,false
+default,Bags,49,SM-7372,false
+default,Bags,50,SM-5717,false
+default,Bags,51,3005-73,false
+default,Bags,52,SM-7774,false
+default,Bags,53,5790-01,false
+default,Bags,54,SM-5917,false
+default,Bags,55,SM-7262,false
+default,Bags,56,SM-5833,false
+default,Bags,57,7900-30,false
+default,Bags,58,8051-33,false
+default,Bags,59,7901-08,false
+default,Bags,60,SM-7300,false
+default,Bags,61,8050-12,false
+default,Bags,62,0011-99,false
+default,Bags,63,SM-5807,false
+default,Bags,64,3750-08,false
+default,Bags,65,SM-5894,false
+default,Bags,66,SM-5915,false
+default,Bags,67,SM-7200,false
+default,Bags,68,2009-08,false
+default,Bags,69,3450-96,false
+default,Bags,70,3450-90,false
+default,Bags,71,3450-41,false
+default,Bags,72,SM-7103,false
+default,Bags,73,2009-05,false
+default,Bags,74,6440-10,false
+default,Bags,75,SM-7396,false
+default,Bags,76,3450-56,false
+default,Bags,77,6760-45,false
+default,Bags,78,8051-87,false
+default,Bags,79,SM-7378,false
+default,Bags,80,3750-32,false
+default,Bags,81,SM-7320,false
+default,Bags,82,SM-7220,false
+default,Bags,83,SM-7475,false
+default,Bags,84,SM-7767,false
+default,Bags,85,SM-5843,false
+default,Bags,86,2009-07,false
+default,Bags,87,8250-06,false
+default,Bags,88,2009-02,false
+default,Bags,89,3860-58,false
+default,Bags,90,3860-76,false
+default,Bags,91,3860-65,false
+default,Bags,92,3860-81,false
+default,Bags,93,SM-7408,false
+default,Bags,94,2009-09,false
+default,Bags,95,0022-46,false
+default,Bags,96,2180-04,false
+default,Bags,97,7950-80,false
+default,Bags,98,3950-03,false
+default,Bags,99,2600-04,false
+default,Bags,100,0011-47,false
+default,Bags,101,3950-04,false
+default,Bags,102,3850-62,false
+default,Bags,103,8052-97,false
+default,Bags,104,3750-37,false
+default,Bags,105,8150-59,false
+default,Bags,106,2600-06,false
+default,Bags,107,2301-36,false
+default,Bags,108,3860-55,false
+default,Bags,109,0022-45,false
+default,Bags,110,3950-01,false
+default,Bags,111,SM-7925,false
+default,Bags,112,3750-29,false
+default,Bags,113,SM-7359,false
+default,Bags,114,SM-7269,false
+default,Bags,115,SM-7209,false
+default,Bags,116,2301-18,false
+default,Bags,117,3860-59,false
+default,Bags,118,SM-5727,false
+default,Bags,119,3451-01,false
+default,Bags,120,9020-39,false
+default,Bags,121,3005-04,false
+default,Bags,122,SM-7428,false
+default,Bags,123,3450-74,false
+default,Bags,124,3750-35,false
+default,Bags,125,3900-01,false
+default,Bags,126,SM-7533,false
+default,Bags,127,2301-60,false
+default,Bags,128,3860-49,false
+default,Bags,129,SM-7227,false
+default,Bags,130,7950-79,false
+default,Bags,131,7901-13,true
+default,Bags,132,9840-50,false
+default,Bags,133,7950-77,false
+default,Bags,134,SM-5994,false
+default,Bags,135,SM-7214,false
+default,Bags,136,SM-7350,false
+default,Bags,137,3950-11,false
+default,Bags,138,SM-7442,false
+default,Bags,139,3950-02,false
+default,Bags,140,2301-37,false
+default,Bags,141,SM-7539,false
+default,Bags,142,2009-15,false
+default,Bags,143,2160-28,false
+default,Bags,144,SM-7757,false
+default,Bags,145,SM-9930,false
+default,Bags,146,3860-57,false
+default,Bags,147,9020-89,false
+default,Bags,148,1627-61,false
+default,Bags,149,SM-7400,false
+default,Bags,150,7900-47,false
+default,Bags,151,3850-25,false
+default,Bags,152,3850-20,false
+default,Bags,153,SM-7085,false
+default,Bags,154,SM-5846,false
+default,Bags,155,3001-70,false
+default,Bags,156,3451-04,false
+default,Bags,157,SM-7753,false
+default,Bags,158,SM-5903,false
+default,Bags,159,3900-02,false
+default,Bags,160,3860-47,false
+default,Bags,161,4400-07,true
+default,Bags,162,7900-46,false
+default,Bags,163,7900-00,false
+default,Bags,164,7950-20,false
+default,Bags,165,3005-26,false
+default,Bags,166,0011-34,false
+default,Bags,167,2610-02,false
+default,Bags,168,3450-45,false
+default,Bags,169,3900-04,false
+default,Bags,170,2950-90,false
+default,Bags,171,3450-54,false
+default,Bags,172,3900-10,false
+default,Bags,173,SM-7095,false
+default,Bags,174,8050-39,false
+default,Bags,175,3860-78,false
+default,Bags,176,3750-02,false
+default,Bags,177,1026-10,false
+default,Bags,178,3750-41,false
+default,Bags,179,SM-7561,false
+default,Bags,180,8200-72,false
+default,Bags,181,3860-66,false
+default,Bags,182,8400-30,false
+default,Bags,183,2009-23,false
+default,Bags,184,SM-5973,false
+default,Bags,185,9020-71,false
+default,Bags,186,SM-7778,false
+default,Bags,187,3251-98,false
+default,Bags,188,9020-10,false
+default,Bags,189,7900-22,false
+default,Bags,190,3450-32,false
+default,Bags,191,2009-17,false
+default,Bags,192,8900-03,false
+default,Bags,193,0022-59,false
+default,Bags,194,2020-28,false
+default,Bags,195,SM-5907,false
+default,Bags,196,8052-53,false
+default,Bags,197,SM-7509,false
+default,Bags,198,8151-10,false
+default,Bags,199,3450-33,false
+default,Bags,200,2009-29,false
+default,Bags,201,3750-39,false
+default,Bags,202,0011-03,false
+default,Bags,203,SM-5968,false
+default,Bags,204,5300-80,false
+default,Bags,205,3950-06,false
+default,Bags,206,2160-95,false
+default,Bags,207,5700-19,false
+default,Bags,208,2009-13,false
+default,Bags,209,3450-70,false
+default,Bags,210,4700-21,false
+default,Bags,211,3860-37,false
+default,Bags,212,2550-24,false
+default,Bags,213,8050-80,false
+default,Bags,214,7950-37,false
+default,Bags,215,3451-03,false
+default,Bags,216,9020-65,false
+default,Bags,217,1627-56,false
+default,Bags,218,3860-77,false
+default,Bags,219,3450-40,false
+default,Bags,220,7901-15,false
+default,Bags,221,3900-03,false
+default,Bags,222,1111-05,false
+default,Bags,223,8051-73,false
+default,Bags,224,2009-47,false
+default,Bags,225,8051-28,false
+default,Bags,226,7950-86,false
+default,Bags,227,SM-5975,false
+default,Bags,228,2009-32,false
+default,Bags,229,3005-74,false
+default,Bags,230,1601-07,true
+default,Bags,231,2020-27,false
+default,Bags,232,7951-96,false
+default,Bags,233,2600-08,false
+default,Bags,234,1967-01,false
+default,Bags,235,1601-06,true
+default,Bags,236,SM-5954,false
+default,Bags,237,SM-5956,false
+default,Bags,238,3900-05,false
+default,Bags,239,9006-01,true
+default,Bags,240,3750-78,false
+default,Bags,241,7951-97,false
+default,Bags,242,SM-5955,false
+default,Bags,243,8052-48,false
+default,Bags,244,8050-18,false
+default,Bags,245,1967-03,false
+default,Bags,246,9550-62,false
+default,Bags,247,2009-66,true
+default,Bags,248,9550-61,false
+default,Bags,249,SM-5969,false
+default,Bags,250,2009-22,false
+default,Bags,251,2009-45,false
+default,Bags,252,3950-19,false
+default,Bags,253,SM-5989,false
+default,Bags,254,9020-64,false
+default,Bags,255,2009-41,false
+default,Bags,256,9550-60,false
+default,Bags,257,4400-01,false
+default,Bags,258,3950-15,false
+default,Bags,259,2009-64,false
+default,Bags,260,3950-10,false
+default,Bags,261,8052-49,false
+default,Bags,262,1111-04,false
+default,Bags,263,3950-16,false
+default,Bags,264,SM-5957,false
+default,Bags,265,SM-5953,false
+default,Bags,266,9006-02,true
+default,Bags,267,9550-70,false
+default,Bags,268,9008-03,false
+default,Bags,269,SM-5978,false
+default,Bags,270,2009-49,false
+default,Bags,271,1967-02,false
+default,Bags,272,9008-04,true
+default,Bags,273,SM-5977,false
+default,Bags,274,9550-71,false
+default,Bags,275,9550-73,false
+default,Bags,276,2009-38,false
+default,Bags,277,7901-23,false
+default,Bags,278,2009-36,false
+default,Bags,279,7900-88,false
+default,Bags,280,1627-59,false
+default,Bags,281,SM-5757,false
+default,Bags,282,1627-69,false
+default,Bags,283,1627-70,false
+default,Bags,284,3750-59,false
+default,Bags,285,1111-08,false
+default,Bags,286,9006-03,true
+default,Bags,287,8052-50,false
+default,Bags,288,2600-12,false
+default,Bags,289,SM-5939,false
+default,Bags,290,1627-67,false
+default,Bags,291,SM-5755,false
+default,Bags,292,3950-17,false
+default,Bags,293,SM-5964,false
+default,Bags,294,SM-5753,false
+default,Bags,295,2009-48,false
+default,Bags,296,9008-01,false
+default,Bags,297,SM-5754,false
+default,Bags,298,4400-14,false
+default,Bags,299,2009-44,false
+default,Bags,300,9009-12,false
+default,Bags,301,8676-01,false
+default,Bags,302,1883-09,false
+default,Bags,303,1883-01,false
+default,Bags,304,8676-04,false
+default,Bags,305,8676-03,false
+default,Bags,306,1883-07,false
+default,Bags,307,1883-05,false
+default,Bags,308,1883-02,false
+default,Bags,309,9009-15,false
+default,Bags,310,9009-06,false
+default,Bags,311,8676-06,false
+default,Drinkware,1,1625-85,false
+default,Drinkware,2,SM-6908,false
+default,Drinkware,3,1626-50,false
+default,Drinkware,4,1624-74,false
+default,Drinkware,5,SM-6789,false
+default,Drinkware,6,1625-66,false
+default,Drinkware,7,1626-37,false
+default,Drinkware,8,SM-6686,false
+default,Drinkware,9,1625-53,false
+default,Drinkware,10,1627-33,false
+default,Drinkware,11,1627-30,false
+default,Drinkware,12,SM-6924,false
+default,Drinkware,13,SM-6799,false
+default,Drinkware,14,1625-76,false
+default,Drinkware,15,SM-6355,false
+default,Drinkware,16,SM-6375,false
+default,Drinkware,17,1627-24,false
+default,Drinkware,18,1601-93,false
+default,Drinkware,19,1601-91,false
+default,Drinkware,20,1626-47,false
+default,Drinkware,21,SM-6012,true
+default,Drinkware,22,1601-95,true
+default,Drinkware,23,SM-6709,false
+default,Drinkware,24,1625-69,false
+default,Drinkware,25,SM-6330,false
+default,Drinkware,26,SM-6928,false
+default,Drinkware,27,1622-63,false
+default,Drinkware,28,SM-6926,false
+default,Drinkware,29,1626-35,false
+default,Drinkware,30,1601-92,false
+default,Drinkware,31,1625-47,false
+default,Drinkware,32,1627-37,false
+default,Drinkware,33,1625-41,false
+default,Drinkware,34,SM-6948,true
+default,Drinkware,35,1627-32,false
+default,Drinkware,36,1623-41,false
+default,Drinkware,37,SM-6942,false
+default,Drinkware,38,SM-6685,false
+default,Drinkware,39,SM-6835,false
+default,Drinkware,40,1627-16,false
+default,Drinkware,41,1625-67,false
+default,Drinkware,42,SM-6975,false
+default,Drinkware,43,SM-6788,false
+default,Drinkware,44,1622-97,false
+default,Drinkware,45,1628-53,false
+default,Drinkware,46,1600-36,false
+default,Drinkware,47,1600-14,false
+default,Drinkware,48,1628-09,false
+default,Drinkware,49,1627-31,false
+default,Drinkware,50,SM-6939,false
+default,Drinkware,51,SM-6667,false
+default,Drinkware,52,1600-33,false
+default,Drinkware,53,1628-80,false
+default,Drinkware,54,1627-17,false
+default,Drinkware,55,1628-20,false
+default,Drinkware,56,1628-82,false
+default,Drinkware,57,1601-94,false
+default,Drinkware,58,1626-46,false
+default,Drinkware,59,SM-6814,false
+default,Drinkware,60,1628-14,false
+default,Drinkware,61,1626-41,false
+default,Drinkware,62,1623-65,false
+default,Drinkware,63,1625-40,false
+default,Drinkware,64,1628-90,false
+default,Drinkware,65,1628-46,false
+default,Drinkware,66,1627-13,false
+default,Drinkware,67,1600-32,false
+default,Drinkware,68,1603-15,true
+default,Drinkware,69,1626-22,false
+default,Drinkware,70,1628-31,false
+default,Drinkware,71,1627-25,false
+default,Drinkware,72,SM-6740,false
+default,Drinkware,73,SM-6665,false
+default,Drinkware,74,SM-6943,false
+default,Drinkware,75,SM-6937,false
+default,Drinkware,76,SM-6598,false
+default,Drinkware,77,SM-6921,false
+default,Drinkware,78,1621-84,false
+default,Drinkware,79,SM-6822,false
+default,Drinkware,80,1627-38,false
+default,Drinkware,81,1626-44,false
+default,Drinkware,82,SM-6867,false
+default,Drinkware,83,1626-60,false
+default,Drinkware,84,SM-6932,false
+default,Drinkware,85,1600-23,false
+default,Drinkware,86,1628-41,false
+default,Drinkware,87,1600-04,false
+default,Drinkware,88,1628-89,false
+default,Drinkware,89,0011-86,false
+default,Drinkware,90,SM-6931,false
+default,Drinkware,91,1628-56,false
+default,Drinkware,92,SM-6673,false
+default,Drinkware,93,SM-6697,false
+default,Drinkware,94,1628-87,false
+default,Drinkware,95,1624-92,false
+default,Drinkware,96,1627-39,false
+default,Drinkware,97,1628-78,false
+default,Drinkware,98,1627-28,false
+default,Drinkware,99,SM-6820,false
+default,Drinkware,100,SM-6941,false
+default,Drinkware,101,1600-40,false
+default,Drinkware,102,1629-01,false
+default,Drinkware,103,1600-61,false
+default,Drinkware,104,1627-36,false
+default,Drinkware,105,SM-6640,false
+default,Drinkware,106,1600-60,false
+default,Drinkware,107,1601-96,false
+default,Drinkware,108,SM-6784,false
+default,Drinkware,109,1600-39,false
+default,Drinkware,110,1600-38,false
+default,Drinkware,111,1627-40,false
+default,Drinkware,112,1628-88,false
+default,Drinkware,113,1600-41,false
+default,Drinkware,114,1600-37,false
+default,Drinkware,115,1600-42,false
+default,Drinkware,116,SM-6933,false
+default,Drinkware,117,1600-29,false
+default,Drinkware,118,1600-43,false
+default,Drinkware,119,SM-6949,false
+default,Drinkware,120,1600-35,false
+default,Drinkware,121,1625-22,false
+default,Drinkware,122,1628-91,false
+default,Drinkware,123,1627-35,false
+default,Drinkware,124,1600-44,false
+default,Drinkware,125,1601-97,false
+default,Drinkware,126,1600-93,false
+default,Drinkware,127,SM-6313,false
+default,Drinkware,128,1601-08,false
+default,Drinkware,129,1600-73,false
+default,Stationery,1,1921-09,false
+default,Stationery,2,2700-33,false
+default,Stationery,3,0600-10,false
+default,Stationery,4,2700-03,false
+default,Stationery,5,SM-4101,false
+default,Stationery,6,2700-67,false
+default,Stationery,7,1065-08,false
+default,Stationery,8,2800-29,false
+default,Stationery,9,0770-10,false
+default,Stationery,10,6620-33,false
+default,Stationery,11,2800-11,false
+default,Stationery,12,6620-31,false
+default,Stationery,13,SM-3468,false
+default,Stationery,14,2800-82,false
+default,Stationery,15,SM-3455,false
+default,Stationery,16,SM-3443,false
+default,Stationery,17,1000-10,false
+default,Stationery,18,2700-07,false
+default,Stationery,19,0551-01,false
+default,Stationery,20,SM-3429,false
+default,Stationery,21,2700-05,false
+default,Stationery,22,2800-45,false
+default,Stationery,23,2800-03,false
+default,Stationery,24,SM-3484,false
+default,Stationery,25,0770-06,false
+default,Stationery,26,0600-01,false
+default,Stationery,27,2700-02,false
+default,Stationery,28,2800-46,false
+default,Stationery,29,0911-22,false
+default,Stationery,30,1015-86,false
+default,Stationery,31,1521-20,false
+default,Stationery,32,SM-3414,false
+default,Stationery,33,SM-3597,false
+default,Stationery,34,2800-01,false
+default,Stationery,35,0770-01,false
+default,Stationery,36,SM-3457,false
+default,Stationery,37,2700-63,false
+default,Stationery,38,SM-3616,false
+default,Stationery,39,1035-81,false
+default,Stationery,40,2800-56,false
+default,Stationery,41,2800-79,false
+default,Stationery,42,2800-74,false
+default,Stationery,43,SM-4801,false
+default,Stationery,44,2800-80,true
+default,Stationery,45,SM-4347,false
+default,Stationery,46,2800-65,false
+default,Stationery,47,1015-26,false
+default,Stationery,48,0770-77,false
+default,Stationery,49,1921-10,false
+default,Stationery,50,SM-3412,false
+default,Stationery,51,2800-19,false
+default,Stationery,52,0551-06,false
+default,Stationery,53,SM-4616,false
+default,Stationery,54,1066-18,false
+default,Stationery,55,SM-3534,false
+default,Stationery,56,0911-19,false
+default,Stationery,57,0551-10,false
+default,Stationery,58,SM-5268,true
+default,Stationery,59,2800-71,false
+default,Stationery,60,SM-5256,false
+default,Stationery,61,SM-3500,false
+default,Stationery,62,1921-12,false
+default,Stationery,63,SM-5260,false
+default,Stationery,64,2800-81,false
+default,Stationery,65,0400-10,false
+default,Stationery,66,1000-01,false
+default,Stationery,67,2700-53,false
+default,Stationery,68,2800-21,false
+default,Stationery,69,1015-17,false
+default,Stationery,70,1067-62,false
+default,Stationery,71,SM-3686,false
+default,Stationery,72,0911-18,false
+default,Stationery,73,0912-01,false
+default,Stationery,74,0911-20,false
+default,Stationery,75,0911-31,false
+default,Stationery,76,2800-58,false
+default,Stationery,77,SM-5255,false
+default,Stationery,78,0911-07,false
+default,Stationery,79,SM-3583,false
+default,Stationery,80,2800-39,false
+default,Stationery,81,2700-04,false
+default,Stationery,82,0911-01,false
+default,Stationery,83,3280-10,false
+default,Stationery,84,SM-5269,true
+default,Stationery,85,0911-32,false
+default,Stationery,86,2700-52,false
+default,Stationery,87,0911-05,false
+default,Stationery,88,2800-94,false
+default,Stationery,89,0911-14,false
+default,Stationery,90,2800-95,false
+default,Stationery,91,1066-55,false
+default,Stationery,92,0911-03,false
+default,Stationery,93,SM-5270,true
+default,Stationery,94,SM-5274,false
+default,Stationery,95,1066-56,false
+default,Stationery,96,0914-01,false
+default,Stationery,97,0913-03,false
+default,Stationery,98,1066-61,true
+default,Stationery,99,2800-96,false
+default,Stationery,100,2900-45,false
+default,Stationery,101,SM-5278,false
+default,Stationery,102,2900-46,false
+default,Stationery,103,0913-01,false
+default,Stationery,104,SM-5273,false
+default,Stationery,105,1066-54,false
+default,Stationery,106,SM-5264,true
+default,Stationery,107,SM-5265,false
+default,Stationery,108,SM-5277,true
+default,Stationery,109,SM-5263,false
+default,Stationery,110,1066-60,true
+default,Stationery,111,SM-5262,false
+default,Stationery,112,0913-02,false
+default,Stationery,113,1066-57,false
+default,Stationery,114,0911-33,false
+default,Stationery,115,SM-5280,true
+default,Stationery,116,1066-62,true
+default,Stationery,117,2800-98,false
+default,Stationery,118,1066-58,false
+default,Stationery,119,SM-5283,false
+default,Stationery,120,SM-5279,true
+default,Stationery,121,SM-5281,true
+default,Stationery,122,SM-5282,true
+default,Home & Outdoor,1,SM-2430,false
+default,Home & Outdoor,2,SM-2425,false
+default,Home & Outdoor,3,SM-2348,false
+default,Home & Outdoor,4,SM-9732,false
+default,Home & Outdoor,5,SM-1528,false
+default,Home & Outdoor,6,SM-2428,false
+default,Home & Outdoor,7,1070-13,false
+default,Home & Outdoor,8,SM-8720,false
+default,Home & Outdoor,9,SM-6890,false
+default,Home & Outdoor,10,7950-57,false
+default,Home & Outdoor,11,SM-1533,false
+default,Home & Outdoor,12,SM-3266,false
+default,Home & Outdoor,13,7950-52,false
+default,Home & Outdoor,14,SM-3345,false
+default,Home & Outdoor,15,SM-7823,false
+default,Home & Outdoor,16,SM-7952,false
+default,Home & Outdoor,17,SM-7821,false
+default,Home & Outdoor,18,SM-9737,false
+default,Home & Outdoor,19,SM-3267,false
+default,Home & Outdoor,20,SM-7796,false
+default,Home & Outdoor,21,SM-8799,false
+default,Home & Outdoor,22,1080-02,false
+default,Home & Outdoor,23,8850-01,false
+default,Home & Outdoor,24,7950-88,false
+default,Home & Outdoor,25,SM-9846,false
+default,Home & Outdoor,26,SM-9403,false
+default,Home & Outdoor,27,SM-7659,false
+default,Home & Outdoor,28,1033-78,false
+default,Home & Outdoor,29,SM-7765,false
+default,Home & Outdoor,30,SM-1610,false
+default,Home & Outdoor,31,1033-85,false
+default,Home & Outdoor,32,1070-15,false
+default,Home & Outdoor,33,1430-28,false
+default,Home & Outdoor,34,SM-1582,false
+default,Home & Outdoor,35,SM-9401,false
+default,Home & Outdoor,36,1401-20,false
+default,Home & Outdoor,37,1080-06,false
+default,Home & Outdoor,38,SM-1502,false
+default,Home & Outdoor,39,1070-79,false
+default,Home & Outdoor,40,SM-9408,false
+default,Home & Outdoor,41,1070-87,false
+default,Home & Outdoor,42,1081-81,false
+default,Home & Outdoor,43,7951-88,false
+default,Home & Outdoor,44,1081-72,false
+default,Home & Outdoor,45,1031-62,false
+default,Home & Outdoor,46,SM-7655,false
+default,Home & Outdoor,47,SM-8713,false
+default,Home & Outdoor,48,SM-8710,false
+default,Home & Outdoor,49,7950-51,false
+default,Home & Outdoor,50,7950-89,false
+default,Home & Outdoor,51,8850-02,false
+default,Home & Outdoor,52,3002-35,false
+default,Home & Outdoor,53,SM-8798,false
+default,Home & Outdoor,54,1033-64,false
+default,Home & Outdoor,55,1033-93,false
+default,Home & Outdoor,56,1081-06,false
+default,Home & Outdoor,57,SM-7700,false
+default,Home & Outdoor,58,1400-32,false
+default,Home & Outdoor,59,SM-7705,false
+default,Home & Outdoor,60,1082-02,false
+default,Home & Outdoor,61,SM-2396,false
+default,Home & Outdoor,62,1033-94,false
+default,Home & Outdoor,63,1081-11,false
+default,Home & Outdoor,64,1031-56,false
+default,Home & Outdoor,65,1081-45,false
+default,Home & Outdoor,66,SM-7719,false
+default,Home & Outdoor,67,SM-7749,false
+default,Home & Outdoor,68,1081-54,false
+default,Home & Outdoor,69,SM-8712,false
+default,Home & Outdoor,70,SM-7724,false
+default,Home & Outdoor,71,1080-49,false
+default,Home & Outdoor,72,1033-65,false
+default,Home & Outdoor,73,SM-1506,false
+default,Home & Outdoor,74,1400-56,false
+default,Home & Outdoor,75,1080-03,false
+default,Home & Outdoor,76,1080-04,false
+default,Home & Outdoor,77,1081-12,false
+default,Home & Outdoor,78,SM-7709,false
+default,Home & Outdoor,79,1070-94,false
+default,Home & Outdoor,80,1072-18,false
+default,Home & Outdoor,81,1070-81,false
+default,Home & Outdoor,82,1080-34,false
+default,Home & Outdoor,83,1081-51,false
+default,Home & Outdoor,84,1081-89,false
+default,Home & Outdoor,85,5050-01,true
+default,Home & Outdoor,86,1081-08,false
+default,Home & Outdoor,87,1081-58,false
+default,Home & Outdoor,88,1081-57,false
+default,Home & Outdoor,89,1081-41,false
+default,Home & Outdoor,90,1080-37,false
+default,Home & Outdoor,91,1431-62,false
+default,Home & Outdoor,92,1080-67,false
+default,Home & Outdoor,93,5050-02,true
+default,Home & Outdoor,94,1010-05,false
+default,Home & Outdoor,95,1450-07,false
+default,Home & Outdoor,96,3350-64,false
+default,Home & Outdoor,97,1400-10,false
+default,Home & Outdoor,98,1081-52,false
+default,Home & Outdoor,99,SM-9350,false
+default,Home & Outdoor,100,1400-57,false
+default,Home & Outdoor,101,SM-1700,false
+default,Home & Outdoor,102,1033-86,false
+default,Home & Outdoor,103,1081-56,false
+default,Home & Outdoor,104,5050-04,true
+default,Home & Outdoor,105,1080-72,false
+default,Home & Outdoor,106,8052-87,false
+default,Home & Outdoor,107,1450-44,false
+default,Home & Outdoor,108,5050-03,true
+default,Home & Outdoor,109,8052-84,false
+default,Home & Outdoor,110,1430-58,false
+default,Home & Outdoor,111,1034-15,false
+default,Home & Outdoor,112,1431-05,false
+default,Home & Outdoor,113,1033-72,false
+default,Home & Outdoor,114,SM-1609,false
+default,Home & Outdoor,115,1431-55,false
+default,Home & Outdoor,116,1095-02,false
+default,Home & Outdoor,117,1095-01,false
+default,Home & Outdoor,118,1095-03,false
+default,Home & Outdoor,119,1081-78,false
+default,Home & Outdoor,120,SM-9527,false
+default,Home & Outdoor,121,1631-25,false
+default,Home & Outdoor,122,1010-08,false
+default,Home & Outdoor,123,1400-12,false
+default,Home & Outdoor,124,SM-1706,false
+default,Home & Outdoor,125,SM-9526,false
+default,Home & Outdoor,126,1095-04,false
+default,Home & Outdoor,127,1400-55,false
+default,Home & Outdoor,128,8053-17,false
+default,Home & Outdoor,129,1081-80,false
+default,Home & Outdoor,130,8053-15,false
+default,Home & Outdoor,131,SM-1709,false
+default,Home & Outdoor,132,1883-03,false
+default,Home & Outdoor,133,8053-16,false
+default,Home & Outdoor,134,SM-1703,false
+default,Apparel,1,TM16398,false
+default,Apparel,2,TM96398,false
+default,Apparel,3,TM18209,false
+default,Apparel,4,TM18135,false
+default,Apparel,5,TM17879,false
+default,Apparel,6,TM16311,false
+default,Apparel,7,TM16512,false
+default,Apparel,8,TM98209,false
+default,Apparel,9,TM16312,false
+default,Apparel,10,TM98117,false
+default,Apparel,11,TM18117,false
+default,Apparel,12,TM16252,false
+default,Apparel,13,TM98130,false
+default,Apparel,14,TM98135,false
+default,Apparel,15,TM18130,false
+default,Apparel,16,TM97814,false
+default,Apparel,17,TM18304,false
+default,Apparel,18,TM16209,false
+default,Apparel,19,TM19534,false
+default,Apparel,20,TM12940,false
+default,Apparel,21,TM18306,false
+default,Apparel,22,TM18408,false
+default,Apparel,23,TM17810,false
+default,Apparel,24,TM18216,false
+default,Apparel,25,TM12937,false
+default,Apparel,26,TM96252,false
+default,Apparel,27,TM96512,false
+default,Apparel,28,TM99547,false
+default,Apparel,29,TM16309,false
+default,Apparel,30,TM97879,false
+default,Apparel,31,TM17814,false
+default,Apparel,32,TM19307,false
+default,Apparel,33,TM19547,false
+default,Apparel,34,TM19101,false
+default,Apparel,35,TM97810,false
+default,Apparel,36,TM92937,false
+default,Apparel,37,TM96311,false
+default,Apparel,38,TM98304,false
+default,Apparel,39,TM18139,false
+default,Apparel,40,TM92940,false
+default,Apparel,41,TM96312,false
+default,Apparel,42,TM98306,false
+default,Apparel,43,TM12604,false
+default,Apparel,44,TM99534,false
+default,Apparel,45,TM16255,false
+default,Apparel,46,TM19598,false
+default,Apparel,47,TM16310,false
+default,Apparel,48,TM98138,false
+default,Apparel,49,TM18138,false
+default,Apparel,50,TM96255,false
+default,Apparel,51,TM18311,false
+default,Apparel,52,TM12725,false
+default,Apparel,53,TM98408,false
+default,Apparel,54,TM98610,false
+default,Apparel,55,TM18220,false
+default,Apparel,56,TM96209,false
+default,Apparel,57,TM18610,false
+default,Apparel,58,TM12608,false
+default,Apparel,59,TM16315,false
+default,Apparel,60,TM12605,false
+default,Apparel,61,TM17744,false
+default,Apparel,62,TM19597,false
+default,Apparel,63,TM16314,false
+default,Apparel,64,TM12504,false
+default,Apparel,65,TM98139,false
+default,Apparel,66,TM17873,false
+default,Apparel,67,TM12939,false
+default,Apparel,68,TM99307,false
+default,Apparel,69,TM19548,false
+default,Apparel,70,TM92605,false
+default,Apparel,71,TM18611,false
+default,Apparel,72,TM18215,false
+default,Apparel,73,TM18143,false
+default,Apparel,74,TM96310,false
+default,Apparel,75,TM92725,false
+default,Apparel,76,TM92608,false
+default,Apparel,77,TM92504,false
+default,Apparel,78,TM98611,false
+default,Apparel,79,TM19652,false
+default,Apparel,80,TM96314,false
+default,Apparel,81,TM92939,false
+default,Apparel,82,TM98311,false
+default,Apparel,83,TM98220,false
+default,Apparel,84,TM18154,false
+default,Apparel,85,TM98143,false
+default,Apparel,86,TM99597,false
+default,Apparel,87,TM96309,false
+default,Apparel,88,TM19542,false
+default,Apparel,89,TM98215,false
+default,Apparel,90,TM99101,false
+default,Apparel,91,TM16627,false
+default,Apparel,92,TM99598,false
+default,Apparel,93,TM99652,false
+default,Apparel,94,TM98154,false
+default,Apparel,95,TM97744,false
+default,Apparel,96,TM92604,false
+default,Apparel,97,TM19898,false
+default,Apparel,98,TM18162,false
+default,Apparel,99,TM99542,false
+default,Apparel,100,TM99548,false
+default,Apparel,101,TM18505,false
+default,Apparel,102,TM97873,false
+default,Apparel,103,TM18702,false
+default,Apparel,104,TM99898,false
+default,Apparel,105,TM17745,false
+default,Apparel,106,TM96315,false
+default,Apparel,107,TM98162,false
+default,Apparel,108,TM98702,false
+default,Apparel,109,TM96627,false
+default,Apparel,110,TM98505,false
+default,Apparel,111,TM18161,false
+default,Apparel,112,TM98161,false
+default,Apparel,113,TM12726,false
+default,Apparel,114,TM97745,false
+default,Apparel,115,TM92726,false
+default,Technology,1,7120-15,false
+default,Technology,2,7141-11,false
+default,Technology,3,7197-25,false
+default,Technology,4,SM-3310,false
+default,Technology,5,8053-08,false
+default,Technology,6,SM-3714,false
+default,Technology,7,7197-64,false
+default,Technology,8,7198-26,false
+default,Technology,9,7141-68,false
+default,Technology,10,SM-2927,false
+default,Technology,11,7124-14,false
+default,Technology,12,SM-2572,false
+default,Technology,13,SM-3763,false
+default,Technology,14,7199-32,false
+default,Technology,15,SM-2575,false
+default,Technology,16,SM-3923,false
+default,Technology,17,7197-05,false
+default,Technology,18,7198-44,false
+default,Technology,19,7121-71,false
+default,Technology,20,SM-3810,false
+default,Technology,21,8053-07,false
+default,Technology,22,7121-18,false
+default,Technology,23,7121-72,false
+default,Technology,24,7143-14,false
+default,Technology,25,7198-63,false
+default,Technology,26,7120-68,false
+default,Technology,27,7141-27,false
+default,Technology,28,SM-3727,false
+default,Technology,29,7121-40,false
+default,Technology,30,7196-13,false
+default,Technology,31,7121-43,false
+default,Technology,32,7197-13,false
+default,Technology,33,1071-27,false
+default,Technology,34,7143-06,false
+default,Technology,35,7141-83,false
+default,Technology,36,7197-53,false
+default,Technology,37,7196-06,false
+default,Technology,38,7141-18,false
+default,Technology,39,7121-73,false
+default,Technology,40,7124-15,false
+default,Technology,41,SM-2826,false
+default,Technology,42,7198-18,false
+default,Technology,43,SM-2936,false
+default,Technology,44,7198-68,false
+default,Technology,45,SM-2800,false
+default,Technology,46,7124-11,false
+default,Technology,47,7121-46,false
+default,Technology,48,SM-2824,false
+default,Technology,49,7197-01,false
+default,Technology,50,8053-09,false
+default,Technology,51,7197-17,false
+default,Technology,52,7194-07,false
+default,Technology,53,7124-01,false
+default,Technology,54,7143-17,false
+default,Technology,55,7197-52,false
+default,Technology,56,5077-01,false
+default,Technology,57,7142-50,false
+default,Technology,58,7197-63,false
+default,Technology,59,7124-05,false
+default,Technology,60,SM-3909,false
+default,Technology,61,7143-32,false
+default,Technology,62,7197-65,false
+default,Technology,63,0044-08,false
+default,Technology,64,SM-2818,false
+default,Technology,65,7195-01,false
+default,Technology,66,7195-50,false
+default,Technology,67,7142-09,false
+default,Technology,68,7143-08,false
+default,Technology,69,7142-53,false
+default,Technology,70,7196-25,false
+default,Technology,71,7196-10,false
+default,Technology,72,7197-47,false
+default,Technology,73,7124-12,false
+default,Technology,74,7196-22,false
+default,Technology,75,7195-05,false
+default,Technology,76,7197-67,false
+default,Technology,77,7143-31,false
+default,Technology,78,7143-41,false
+default,Technology,79,7197-40,false
+default,Technology,80,7196-21,false
+default,Technology,81,7143-37,false
+default,Memory,1,1690-53,false
+default,Memory,2,1690-48,false
+default,Memory,3,1690-49,false
