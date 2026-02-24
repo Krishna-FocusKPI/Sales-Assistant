@@ -3,6 +3,7 @@ import textwrap
 from datetime import datetime, timedelta
 
 import pandas as pd
+import streamlit as st
 try:
     from langchain_core.tools import BaseTool
 except ImportError:

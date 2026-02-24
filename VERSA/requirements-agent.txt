@@ -12,6 +12,7 @@ graphviz>=0.20
 python-pptx>=0.6
 pandasql>=0.7
 tabulate>=0.9
+snowflake-connector-python>=3.10
 gnews>=0.3
 beautifulsoup4>=4.12
 fake-useragent>=1.5

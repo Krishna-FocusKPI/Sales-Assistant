@@ -177,7 +177,7 @@ def show_end_workflow_confirm_modal():
     st.warning("Ending the workflow will reset the chat and clear your current session. Are you sure you want to continue?")
     from .sidebar import clear_workflow
     with st.container(key="end_wf_modal_actions"):
-        col_spacer, col_cancel, col_end = st.columns([2, 1, 1])
+        col_cancel, col_spacer, col_end = st.columns([1, 2, 1])
         with col_cancel:
             if st.button("Cancel", key="end_wf_cancel"):
                 _clear_end_workflow_confirm_flag()

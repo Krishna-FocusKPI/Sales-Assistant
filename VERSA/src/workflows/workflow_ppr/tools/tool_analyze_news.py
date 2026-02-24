@@ -8,6 +8,7 @@ from typing import Dict, List
 
 import requests
 import streamlit as st
+from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
 from bs4 import BeautifulSoup
 from gnews import GNews
 try:
@@ -16,7 +17,6 @@ try:
 except ImportError:
     from langchain.tools import BaseTool
     from langchain_core.messages import HumanMessage
-from langchain_community.document_loaders import WebBaseLoader
 
 from src.common.workflow_context import get_workflow
 from src.common.provider import get_chat_model, get_default_provider
@@ -41,12 +41,14 @@ class AnalyzeNews(BaseTool):
             # of topic and keywords
             news_analysis = {}
             
+            # Streamlit UI (spinner/progress) only works on the main script thread; tools run in worker threads.
+            has_st_ctx = get_script_run_ctx() is not None
             total_topics = len(st.secrets['ppr']['news_analysis']['topics'])
             for idx, (topic, keywords) in enumerate(st.secrets['ppr']['news_analysis']['topics'].items()):
-                try:
-                    spinner_ctx = st.spinner(f"({idx+1}/{total_topics}) Fetching news for {topic}...")
-                except Exception:
-                    spinner_ctx = nullcontext()
+                spinner_ctx = (
+                    st.spinner(f"({idx+1}/{total_topics}) Fetching news for {topic}...")
+                    if has_st_ctx else nullcontext()
+                )
                 with spinner_ctx:
                     news = _get_news(logo_name=logo_name, topic=topic, keywords=keywords)
                     
@@ -58,10 +60,11 @@ class AnalyzeNews(BaseTool):
                     news = _fetch_news_content(news)
 
                     progress = None
-                    try:
-                        progress = st.progress(0.0, text="Reading news and identifying potential sales opportunities...")
-                    except Exception:
-                        pass
+                    if has_st_ctx:
+                        try:
+                            progress = st.progress(0.0, text="Reading news and identifying potential sales opportunities...")
+                        except Exception:
+                            pass
                     processed = []
                     for idx, _n in enumerate(news):
                         if progress is not None:
@@ -161,10 +164,11 @@ Output:
 """
         return _to_prompt_bot(instruction).lower()
     progress = None
-    try:
-        progress = st.progress(0.0, text="Deduplicating news...")
-    except Exception:
-        pass
+    if get_script_run_ctx() is not None:
+        try:
+            progress = st.progress(0.0, text="Deduplicating news...")
+        except Exception:
+            pass
     unique = [news[0]]
     for idx, article in enumerate(news[1:]):
         if progress is not None:
@@ -177,17 +181,25 @@ Output:
     return unique
 
 
+def _load_url_content(url: str, timeout: int = 3) -> str | None:
+    """Fetch URL and return raw HTML as string, or None on failure."""
+    try:
+        resp = requests.get(url, timeout=timeout, headers={"User-Agent": "Mozilla/5.0 (compatible; NewsBot/1.0)"})
+        resp.raise_for_status()
+        return resp.text
+    except Exception:
+        return None
+
+
 def _fetch_news_content(news):
     def _fetch(_n, shared: list):
         try:
             url = _n.url
-            content = WebBaseLoader(url, requests_kwargs={'timeout': 3}).load()
+            content = _load_url_content(url)
             
             # did not get any content
-            if not content or not isinstance(content, list) or len(content) == 0:
+            if not content:
                 return
-            # content[0] is the content of the page
-            content = content[0].page_content
                 
             # handle google news jump problem
             if "Google NewsOpening" in content:
@@ -196,10 +208,8 @@ def _fetch_news_content(news):
                     return
                 
                 url = match.group(1)
-                content = WebBaseLoader(url, requests_kwargs={'timeout': 3}).load()
-                if content and isinstance(content, list) and len(content) > 0:
-                    content = content[0].page_content
-                else:
+                content = _load_url_content(url)
+                if not content:
                     return
             
             # check 404

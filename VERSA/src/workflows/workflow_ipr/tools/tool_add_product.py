@@ -6,9 +6,12 @@ import pandas as pd
 import streamlit as st
 try:
     from langchain_core.tools import BaseTool
+    from langchain_core.messages import HumanMessage
 except ImportError:
     from langchain.tools import BaseTool
+    from langchain_core.messages import HumanMessage
 
+from src.common.provider import get_chat_model, get_default_provider
 from src.common.workflow_context import get_workflow
 
 
@@ -314,15 +317,32 @@ def _identify_funtion_to_call(criteria: str):
     
 
 def _to_prompt_bot(instruction, use_service=False):
+    """Use promptbot when session state is available (main thread); otherwise call LLM directly (worker thread)."""
     workflow = get_workflow()
     if not workflow:
-        return "Workflow context not available."
-    to_next = workflow['to_next_memory']
-    to_next.reset()
-    to_next.message = instruction
-    to_next.action = "promptbot"
-    if use_service:
-        st.session_state.promptbotservice()
-    else:
-        st.session_state.promptbot()
-    return workflow['to_next_memory'].message
+        return ""
+
+    try:
+        _ = st.session_state.promptbotservice if use_service else st.session_state.promptbot
+    except (KeyError, AttributeError):
+        _ = None
+
+    if _ is not None:
+        to_next = workflow["to_next_memory"]
+        to_next.reset()
+        to_next.message = instruction
+        to_next.action = "promptbot"
+        if use_service:
+            st.session_state.promptbotservice()
+        else:
+            st.session_state.promptbot()
+        return workflow["to_next_memory"].message
+
+    try:
+        provider = get_default_provider()
+        llm = get_chat_model(provider, temperature=0, max_tokens=500)
+        response = llm.invoke([HumanMessage(content=instruction)])
+        return (response.content if hasattr(response, "content") else str(response)).strip()
+    except Exception as e:
+        logging.warning("Direct LLM fallback in add_product failed: %s", e)
+        return ""

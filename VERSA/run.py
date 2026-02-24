@@ -56,6 +56,12 @@ section.stSidebar,
 section.stSidebar > div {
     background: transparent !important;
 }
+/* Left sidebar: keep “End current workflow” button text on one line */
+[data-testid="stSidebar"] button,
+section[data-testid="stSidebar"] button {
+    white-space: nowrap !important;
+    min-width: fit-content !important;
+}
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span,
@@ -138,8 +144,8 @@ main [class*="st-key-right_sidebar_panel"] {
     border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
     padding: 1.25rem 0.75rem 0.5rem 0.75rem !important;
     margin-top: 0.5rem !important;
-    height: calc(100vh - 2rem) !important;
-    max-height: calc(100vh - 2rem) !important;
+    height: calc(100vh - 1.5rem) !important;
+    max-height: calc(100vh - 1.5rem) !important;
     min-height: 0 !important;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08) !important;
     margin-right: 0 !important;
@@ -207,7 +213,14 @@ main [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] {
     margin-top: 0.15rem !important;
     margin-bottom: 0.15rem !important;
 }
-/* 3. Chat area: scrollable; flex so we can align user right; bounded height so scroll works */
+/* View products buttons: left-aligned */
+[data-testid="stAppViewContainer"] [class*="st-key-view_products_buttons"],
+main [class*="st-key-view_products_buttons"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+/* 3. Chat area: scrollable; flex so we can align user right; same height cap as chat panel */
 [data-testid="stAppViewContainer"] [class*="st-key-chat_area"],
 main [class*="st-key-chat_area"] {
     display: flex !important;
@@ -215,7 +228,7 @@ main [class*="st-key-chat_area"] {
     width: 100% !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
-    max-height: calc(100vh - 10rem) !important;
+    max-height: calc(100vh - 2rem) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -444,7 +457,8 @@ main [class*="st-key-chat_glass_panel"] [data-testid="stHorizontalBlock"]:first-
     font-size: 0.8rem !important;
     white-space: nowrap !important;
 }
-/* End workflow modal: Cancel left, End workflow right; button text on one line */
+/* End workflow modal (opens from sidebar): Cancel left, End workflow right; button text on one line. Global selector so it applies when modal is portaled outside main. */
+[class*="st-key-end_wf_modal_actions"] button,
 [data-testid="stAppViewContainer"] [class*="st-key-end_wf_modal_actions"] button,
 main [class*="st-key-end_wf_modal_actions"] button {
     white-space: nowrap !important;
@@ -529,8 +543,7 @@ def page_chatting():
                                 unsafe_allow_html=True,
                             )
 
-                # Step 2b. "View products" / "View selected products" buttons (open modals via workflow ui)
-                # Left-aligned: single button in first column; two buttons in a horizontal row from the left.
+                # Step 2b. "View products" / "View selected products" buttons (open modals via workflow ui); stacked vertically, left-aligned
                 workflow = st.session_state.get("workflow")
                 if workflow and workflow.get("name") == WorkFlows.WORKFLOW_PPR.value:
                     from src.workflows.workflow_ppr.ui.support import (
@@ -539,28 +552,23 @@ def page_chatting():
                     )
                     has_rec = _has_product_data()
                     has_sel = _has_selected_products()
-                    if has_rec and has_sel:
-                        c1, c2 = st.columns(2)
-                        with c1:
-                            if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
-                                st.session_state.show_selected_products_modal = True
-                                st.rerun()
-                        with c2:
-                            if st.button("View recommended products", type="secondary", key="view_products_btn"):
-                                st.session_state.show_products_modal = True
-                                st.rerun()
-                    elif has_sel:
-                        col_btn, _ = st.columns([1, 1])
-                        with col_btn:
-                            if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
-                                st.session_state.show_selected_products_modal = True
-                                st.rerun()
-                    elif has_rec:
-                        col_btn, _ = st.columns([1, 1])
-                        with col_btn:
-                            if st.button("View recommended products", type="secondary", key="view_products_btn"):
-                                st.session_state.show_products_modal = True
-                                st.rerun()
+                    if has_rec or has_sel:
+                        with st.container(key="view_products_buttons"):
+                            if has_rec and has_sel:
+                                if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
+                                    st.session_state.show_selected_products_modal = True
+                                    st.rerun()
+                                if st.button("View recommended products", type="secondary", key="view_products_btn"):
+                                    st.session_state.show_products_modal = True
+                                    st.rerun()
+                            elif has_sel:
+                                if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
+                                    st.session_state.show_selected_products_modal = True
+                                    st.rerun()
+                            elif has_rec:
+                                if st.button("View recommended products", type="secondary", key="view_products_btn"):
+                                    st.session_state.show_products_modal = True
+                                    st.rerun()
                 elif workflow and workflow.get("name") == WorkFlows.WORKFLOW_IPR.value:
                     from src.workflows.workflow_ipr.ui.support import (
                         _has_product_data,
@@ -568,28 +576,23 @@ def page_chatting():
                     )
                     has_rec = _has_product_data()
                     has_sel = _has_selected_products()
-                    if has_rec and has_sel:
-                        c1, c2 = st.columns(2)
-                        with c1:
-                            if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
-                                st.session_state.show_selected_products_modal = True
-                                st.rerun()
-                        with c2:
-                            if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
-                                st.session_state.show_products_modal = True
-                                st.rerun()
-                    elif has_sel:
-                        col_btn, _ = st.columns([1, 1])
-                        with col_btn:
-                            if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
-                                st.session_state.show_selected_products_modal = True
-                                st.rerun()
-                    elif has_rec:
-                        col_btn, _ = st.columns([1, 1])
-                        with col_btn:
-                            if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
-                                st.session_state.show_products_modal = True
-                                st.rerun()
+                    if has_rec or has_sel:
+                        with st.container(key="view_products_buttons"):
+                            if has_rec and has_sel:
+                                if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
+                                    st.session_state.show_selected_products_modal = True
+                                    st.rerun()
+                                if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
+                                    st.session_state.show_products_modal = True
+                                    st.rerun()
+                            elif has_sel:
+                                if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
+                                    st.session_state.show_selected_products_modal = True
+                                    st.rerun()
+                            elif has_rec:
+                                if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
+                                    st.session_state.show_products_modal = True
+                                    st.rerun()
 
                 # Step 3. While AI is generating: show "Thinking..." in a fixed-height slot so layout doesn't shift.
                 generation_in_progress = st.session_state.get("generation_in_progress", False)

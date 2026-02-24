@@ -1,6 +1,7 @@
 import copy
 import logging
 import math
+import os
 import uuid
 
 import streamlit as st
@@ -11,6 +12,7 @@ except ImportError:
 from PIL import Image
 
 from src.common.workflow_context import get_workflow
+from src.utils.versa_paths import get_project_root, resolve_workflow_path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_VERTICAL_ANCHOR as MSO_ANCHOR
@@ -23,8 +25,16 @@ class BuildDeck(BaseTool):
     description: str = "Use this tool to build a recurring revenue deck, to use this tool you do not need to provide any parameter."
     
     def _run(self) -> str:
-        temnplate_path = st.secrets.ipr.deck.template_path
-        deck = Presentation(temnplate_path)        
+        try:
+            raw_template = (st.secrets.ipr.deck.template_path or "").strip()
+        except (AttributeError, KeyError, TypeError):
+            raw_template = ""
+        if not raw_template:
+            return "Error: deck template path not configured (set ipr.deck.template_path in secrets)."
+        template_path = resolve_workflow_path(raw_template)
+        if not template_path or not os.path.isfile(template_path):
+            return f"Error: deck template file not found. Resolved path: {template_path or 'none'} (expected under project .versa/workflows/, e.g. ipr_template.pptx)."
+        deck = Presentation(template_path)        
 
         try:
             logging.info(f"* Building deck:")
@@ -57,10 +67,16 @@ class BuildDeck(BaseTool):
                 _page_product_details(deck=deck, product=product)
 
             _remove_template_slide(deck)
-            
-            # # get a randome filename
+
             filename = f"presentation_{uuid.uuid4()}.pptx"
-            save_dir = f"{st.secrets.downloads.deck_saving_path}/{filename}"
+            try:
+                save_path = (st.secrets.downloads.deck_saving_path or "").strip().replace("\\", "/").rstrip("/")
+            except (AttributeError, KeyError, TypeError):
+                save_path = ""
+            if not save_path or not os.path.isdir(save_path):
+                save_path = str(get_project_root() / ".versa" / "downloads")
+            os.makedirs(save_path, exist_ok=True)
+            save_dir = os.path.join(save_path, filename)
             deck.save(save_dir)
             self._on_success(filename)
             
