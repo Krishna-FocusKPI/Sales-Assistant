@@ -1,10 +1,14 @@
 """
 Provider factory for the LangGraph rebuild.
 Returns a chat model (OpenAI or Anthropic) and embedding model for the agent.
-Chat: OPENAI_API_KEY, OPENAI_MODEL, ANTHROPIC_API_KEY, ANTHROPIC_MODEL.
-Embeddings: OPENAI only (Anthropic does not offer embedding models). Use OPENAI_API_KEY and
-OPENAI_EMBEDDING_MODEL (e.g. text-embedding-3-small). When EMBEDDING_PROVIDER=anthropic we still
-use OpenAI for embeddings and log; set OPENAI_API_KEY for that.
+
+Configuration (no legacy flat keys):
+  - Environment: OPENAI_API_KEY, OPENAI_MODEL, OPENAI_EMBEDDING_MODEL, ANTHROPIC_API_KEY, ANTHROPIC_MODEL,
+    LLM_PROVIDER, EMBEDDING_PROVIDER.
+  - Or Streamlit secrets.toml: [openai] api_key, model, embedding_model; [anthropic] api_key, model;
+    optional [llm] provider, [embedding] provider.
+
+Embeddings use OpenAI only; when EMBEDDING_PROVIDER=anthropic, OpenAI embeddings are still used (set OPENAI_API_KEY).
 """
 import logging
 import os
