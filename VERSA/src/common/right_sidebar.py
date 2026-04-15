@@ -20,11 +20,16 @@ def _render_flowchart_blocks(steps: list[str], current_index: int) -> None:
         border = "2px solid #6495ed" if is_current else "1px solid #ddd"
         steps_html.append(
             f'<div style="padding: 0.2rem 0.35rem; margin: 0.08rem 0; border-radius: 4px; '
-            f'background: {bg}; border: {border}; font-size: 0.8rem; color: #fff; font-weight: 500;">'
+            f'background: {bg}; border: {border}; font-size: 0.8rem; color: #fff; font-weight: 500; '
+            f'max-width: 100%; box-sizing: border-box; word-wrap: break-word; overflow-wrap: anywhere;">'
             f'{"→ " if is_current else "○ "}{label}'
             f'</div>'
         )
-    block = '<div style="padding: 0.1rem 0;">' + "".join(steps_html) + "</div>"
+    block = (
+        '<div style="padding: 0.1rem 0; max-width: 100%; box-sizing: border-box; overflow-x: hidden;">'
+        + "".join(steps_html)
+        + "</div>"
+    )
     st.markdown(block, unsafe_allow_html=True)
 
 
@@ -36,7 +41,11 @@ def _render_workflow_panel(workflow_name: str, steps: list[str], current_index: 
     next_step_name = steps[next_i] if next_i < total else "Complete"
 
     st.markdown("#### Workflow progress")
-    progress = (current_index + 0.5) / total if total else 0
+    # Last step (e.g. 6/6): show a full bar. Earlier steps use +0.5 so the bar sits between step boundaries.
+    if total and current_index >= total - 1:
+        progress = 1.0
+    else:
+        progress = (current_index + 0.5) / total if total else 0
     st.progress(min(progress, 1.0), text=f"Step {current_index + 1} of {total}")
 
     st.markdown("**Current step**")

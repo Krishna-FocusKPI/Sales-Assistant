@@ -12,7 +12,7 @@ PPR_FLOW_STEPS = [
     "Validate Logo",
     "Product Recommendations",
     "Customize products list",
-    "Analyze News (optional)",
+    "Logo sales analysis",
     "Build Deck",
 ]
 
@@ -36,7 +36,16 @@ def _ppr_current_index(workflow: dict) -> int:
             return 2
         if getattr(memory, "deck_name", None):
             return 5
-        return 3
+        # Stay on Product Recommendations until there is a non-empty shopping list (not only a recommended-products table).
+        if not has_list:
+            return 2
+        analysis = getattr(memory, "logo_sales_analysis", None)
+        has_analysis = analysis is not None and not (hasattr(analysis, "empty") and analysis.empty)
+        # Stay on "Customize products list" until analyze_logo_sales has persisted results.
+        # Do not highlight "Logo sales analysis" while the bot is only about to run the tool.
+        if not has_analysis:
+            return 3
+        return 4
     except Exception:
         return 0
 
@@ -96,6 +105,10 @@ def _ipr_current_index(workflow: dict) -> int:
             return 2
         if getattr(memory, "deck_name", None):
             return 4
+        # Like PPR: do not show "Customize products list" until there is a real shopping list.
+        # Recommendations alone (dataframe but empty list) stay on Product Recommendations.
+        if not has_list:
+            return 2
         return 3
     except Exception:
         return 0
@@ -105,14 +118,10 @@ def _ipr_current_index(workflow: dict) -> int:
 # API for right sidebar
 # -----------------------------------------------------------------------------
 def get_next_step_index(workflow_name: str, current_index: int, total: int) -> int:
-    """Index of the next recommended step (or total for Complete). PPR skips Analyze News."""
+    """Index of the next recommended step (or total for Complete)."""
     if current_index >= total - 1:
         return total  # Complete
-    next_i = current_index + 1
-    if workflow_name == WorkFlows.WORKFLOW_PPR.value and next_i == 4:
-        # Skip "Analyze News (optional)", suggest Build Deck
-        return 5
-    return next_i
+    return current_index + 1
 
 
 def get_flow_steps(workflow_name: str) -> list[str]:

@@ -35,3 +35,4 @@ class WorkFlowMemory:
     
     # step 4 - build deck
     deck_name = None
+    deck_path: str = None

@@ -8,6 +8,7 @@ so lookups match (see Dockerfile). Locally, omit VERSA_DATA_ROOT to use <project
 import logging
 import os
 from pathlib import Path
+from typing import Any, Optional
 
 import pandas as pd
 
@@ -38,6 +39,25 @@ def get_workflow_cache_path(filename: str) -> Path:
 def get_versa_downloads_dir() -> Path:
     """Directory for generated decks / downloads under the same versa root."""
     return get_versa_data_root() / "downloads"
+
+
+def resolve_saved_deck_path(workflow_memory: Any) -> Optional[Path]:
+    """
+    Path to the last built .pptx for PPR/IPR, if the file exists.
+    Prefer workflow_memory.deck_path when set; else <versa>/downloads/<deck_name>.
+    """
+    if workflow_memory is None:
+        return None
+    saved = getattr(workflow_memory, "deck_path", None)
+    if saved:
+        p = Path(str(saved))
+        if p.is_file():
+            return p
+    name = getattr(workflow_memory, "deck_name", None)
+    if not name:
+        return None
+    p = get_versa_downloads_dir() / str(name)
+    return p if p.is_file() else None
 
 
 def resolve_workflow_path(path_or_filename: str) -> str:

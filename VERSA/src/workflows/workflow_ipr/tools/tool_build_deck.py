@@ -78,7 +78,7 @@ class BuildDeck(BaseTool):
             os.makedirs(save_path, exist_ok=True)
             save_dir = os.path.join(save_path, filename)
             deck.save(save_dir)
-            self._on_success(filename)
+            self._on_success(filename, save_dir)
             
         except Exception as e:
             logging.error(f"Error while building deck.", exc_info=True)
@@ -87,20 +87,24 @@ class BuildDeck(BaseTool):
     def _arun(self):
         raise NotImplementedError("This tool does not support async")
     
-    def _on_success(self, filename) -> str:
+    def _on_success(self, filename: str, save_dir: str) -> str:
         workflow = get_workflow()
         if not workflow:
             return "Workflow context not available."
         memory = workflow['workflow_memory']
         memory.deck_name = filename
+        memory.deck_path = save_dir
 
         to_next = workflow['to_next_memory']
         to_next.reset()
         to_next.decision = "SUCCESS"
         to_next.source = self.name
-        to_next.message = f"Sucessfully built the deck."
+        to_next.message = (
+            "Successfully built the deck. Use **Download PowerPoint deck** under **Deck file** in the left sidebar "
+            "to save the file to your computer."
+        )
 
-        logging.info(f"* Sucessfully built the deck.")
+        logging.info(f"* Sucessfully built the deck at {save_dir}")
         return to_next.message
     
     def _on_error(self) -> str:

@@ -50,7 +50,10 @@ class RecommendCategory(BaseTool):
         to_next.reset()
         to_next.decision = "SUCCESS"
         to_next.source = self.name
-        to_next.message = f"Sucessfully recommended the category."
+        # Include exact config key so the model does not paraphrase from categories_explanation (e.g. "home improvement").
+        to_next.message = (
+            f"Recommended category (exact [ppr.categories] key — use this string for validate_category): {category!r}"
+        )
         return to_next.message
 
     def _on_error(self, logo_name: str, distributor_name: str) -> str:

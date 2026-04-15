@@ -1,5 +1,7 @@
 import streamlit as st
 
+from src.common.deck_download_ui import render_deck_download_if_ready
+
 from .support import _has_product_data, _has_selected_products
 
 
@@ -14,20 +16,6 @@ def clear_workflow():
 
 def page_sidebar():
     """Sidebar: links that open modals (recommended products, selected products, params, prompt suggestions). End workflow opens confirmation modal."""
-    # Light background for modal-opener buttons so text is readable (avoid white-on-white)
-    st.sidebar.markdown(
-        """
-        <style>
-        [data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-            background-color: rgba(255, 255, 255, 0.12) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #1f2937 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
     st.sidebar.caption("Open in modal")
     if _has_product_data():
         if st.sidebar.button("Recommended products", key="sidebar_view_products"):
@@ -43,6 +31,8 @@ def page_sidebar():
     if st.sidebar.button("Prompt suggestions", key="sidebar_prompt"):
         st.session_state.show_prompt_modal = True
         st.rerun()
+
+    render_deck_download_if_ready(key_prefix="versa_deck")
 
     st.sidebar.divider()
     if st.sidebar.button("End current workflow", type="primary", key="sidebar_end_workflow"):

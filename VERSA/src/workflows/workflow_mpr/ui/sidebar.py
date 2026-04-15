@@ -6,6 +6,11 @@ from .support import _has_product_data
 PROVIDER_LABELS = {"openai": "OpenAI", "anthropic": "Anthropic"}
 
 
+def _mpr_sidebar_provider_to_header() -> None:
+    """Keep chat header `ppr_provider` in sync when the MPR sidebar model changes."""
+    st.session_state["ppr_provider"] = st.session_state.get("mpr_provider_sidebar", "openai")
+
+
 def clear_workflow():
     st.session_state.workflow = {}
     st.session_state.messages = [
@@ -15,26 +20,13 @@ def clear_workflow():
 
 
 def page_sidebar():
-    # Light background for modal-opener buttons so text is readable (avoid white-on-white)
-    st.sidebar.markdown(
-        """
-        <style>
-        [data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-            background-color: rgba(255, 255, 255, 0.12) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #1f2937 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.session_state.setdefault("ppr_provider_sidebar", st.session_state.get("ppr_provider", "openai"))
+    st.session_state.setdefault("mpr_provider_sidebar", st.session_state.get("ppr_provider", "openai"))
     st.sidebar.selectbox(
         "Model provider",
         options=list(SUPPORTED_PROVIDERS),
         format_func=lambda p: PROVIDER_LABELS.get(p, p.title()),
-        key="ppr_provider_sidebar",
+        key="mpr_provider_sidebar",
+        on_change=_mpr_sidebar_provider_to_header,
     )
     st.sidebar.divider()
     st.sidebar.caption("Open in modal")

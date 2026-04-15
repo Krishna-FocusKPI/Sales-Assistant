@@ -46,12 +46,26 @@ from pptx.util import Inches, Pt
 
 class BuildDeck(BaseTool):
     name: str = "build_deck"
-    description: str = "Use this tool to build a recurring revenue deck, to use this tool you do not need to provide any parameter."
-    
+    description: str = (
+        "Build the recurring revenue PowerPoint deck from workflow state. "
+        "Requires analyze_logo_sales to have completed successfully first (non-empty analysis in memory). "
+        "No parameters."
+    )
+
     def _run(self) -> str:
         workflow = get_workflow()
         if not workflow:
             return "Error: workflow context not available."
+        memory = workflow["workflow_memory"]
+        logo_sales_analysis = getattr(memory, "logo_sales_analysis", None)
+        if logo_sales_analysis is None or (
+            hasattr(logo_sales_analysis, "empty") and logo_sales_analysis.empty
+        ):
+            return (
+                "Cannot build the deck yet: logo sales analysis is missing or empty. "
+                "Call analyze_logo_sales first (after distributor and logo are validated), "
+                "then call build_deck when the user is ready for the presentation."
+            )
         template_path = _get_deck_config("template_path", "ppr.deck.template_path")
         if not template_path:
             return "Error: deck template path not configured (set in secrets or PPR_DECK_TEMPLATE_PATH)."
@@ -59,7 +73,6 @@ class BuildDeck(BaseTool):
         if not template_path or not os.path.isfile(template_path):
             return f"Error: deck template file not found at {template_path or 'resolved path'}."
         deck = Presentation(template_path)
-        memory = workflow['workflow_memory']
         try:
             logging.info(f"* Building deck:")
             shopping_list = memory.shopping_list
@@ -126,7 +139,7 @@ class BuildDeck(BaseTool):
             os.makedirs(save_path, exist_ok=True)
             save_dir = os.path.join(save_path, filename)
             deck.save(save_dir)
-            self._on_success(filename)
+            self._on_success(filename, save_dir)
             
         except Exception as e:
             logging.error(f"Error while building deck.", exc_info=True)
@@ -135,18 +148,22 @@ class BuildDeck(BaseTool):
     def _arun(self):
         raise NotImplementedError("This tool does not support async")
     
-    def _on_success(self, filename) -> str:
+    def _on_success(self, filename: str, save_dir: str) -> str:
         workflow = get_workflow()
         if not workflow:
             return "Sucessfully built the deck."
         memory = workflow['workflow_memory']
         memory.deck_name = filename
+        memory.deck_path = save_dir
         to_next = workflow['to_next_memory']
         to_next.reset()
         to_next.decision = "SUCCESS"
         to_next.source = self.name
-        to_next.message = f"Sucessfully built the deck."
-        logging.info(f"* Sucessfully built the deck.")
+        to_next.message = (
+            "Successfully built the deck. Use **Download PowerPoint deck** under **Deck file** in the left sidebar "
+            "to save the file to your computer."
+        )
+        logging.info(f"* Sucessfully built the deck at {save_dir}")
         return to_next.message
 
     def _on_error(self) -> str:
@@ -485,6 +502,14 @@ def _page_logo_sales_analysis(deck, logo_name, distributor_name, logo_sales_anal
 
     _set_title(shape_dict['title'])
     _set_subtitle(shape_dict['subtitle'])
+
+    if logo_sales_analysis is None:
+        logging.warning("logo_sales_analysis is None; skipping logo sales table (run logo sales analysis first).")
+        return
+    if hasattr(logo_sales_analysis, "empty") and logo_sales_analysis.empty:
+        logging.warning("logo_sales_analysis is empty; skipping logo sales table.")
+        return
+
     _set_table(shape_dict['table'])
 
 

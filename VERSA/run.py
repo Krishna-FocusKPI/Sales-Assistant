@@ -5,6 +5,7 @@ from src.utils.initialization import initialization
 from src.workflows.workflows import routing
 from src.workflows import WorkFlows
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 warnings.filterwarnings("ignore")
@@ -42,15 +43,15 @@ footer {
     visibility: hidden !important;
     display: none !important;
 }
-/* 0b. Sidebar: balanced glass – see-through + strong blur, text still readable */
+/* 0b. Sidebar: darker panel so labels and controls stay readable over bright backgrounds */
 section[data-testid="stSidebar"],
 section.stSidebar,
 [data-testid="stSidebar"] {
-    background: rgba(22, 28, 40, 0.72) !important;
-    background-color: rgba(22, 28, 40, 0.72) !important;
-    backdrop-filter: blur(8px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(12, 16, 28, 0.94) !important;
+    background-color: rgba(12, 16, 28, 0.94) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 [data-testid="stSidebar"] > div,
 section.stSidebar > div {
@@ -61,6 +62,19 @@ section.stSidebar > div {
 section[data-testid="stSidebar"] button {
     white-space: nowrap !important;
     min-width: fit-content !important;
+}
+/* Sidebar secondary + download: dark chips, white text (readable on dark panel) */
+[data-testid="stSidebar"] .stButton > button[kind="secondary"],
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+    background-color: rgba(48, 58, 88, 0.98) !important;
+    color: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+[data-testid="stSidebar"] [data-testid="stDownloadButton"] button,
+[data-testid="stSidebar"] [data-testid="stDownloadButton"] > button {
+    background-color: rgba(48, 58, 88, 0.98) !important;
+    color: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] p,
@@ -102,6 +116,7 @@ main [class*="block-container"] {
     padding: 0 !important;
     min-height: auto !important;
     max-height: 100vh !important;
+    max-width: min(1040px, 96vw) !important;
     overflow: hidden !important;
     border: none !important;
     box-shadow: none !important;
@@ -113,6 +128,15 @@ main .block-container:has([class*="st-key-right_sidebar_panel"]) {
     padding-left: 1rem !important;
     padding-right: 0 !important;
 }
+/* Allow columns to shrink; keep workflow column from getting unusably narrow */
+[data-testid="stAppViewContainer"] .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="column"],
+main .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="column"] {
+    min-width: 0 !important;
+}
+[data-testid="stAppViewContainer"] .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="column"]:last-child,
+main .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="column"]:last-child {
+    min-width: min(100%, 280px) !important;
+}
 /* 2b. Chat panel only: light frosted glass; fixed height so only chat area scrolls */
 [data-testid="stAppViewContainer"] [class*="st-key-chat_glass_panel"],
 main [class*="st-key-chat_glass_panel"] {
@@ -122,9 +146,9 @@ main [class*="st-key-chat_glass_panel"] {
     -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
     border-radius: 12px;
     padding: 1.25rem 1.5rem !important;
-    margin-top: 0.5rem;
-    height: calc(100vh - 2rem) !important;
-    max-height: calc(100vh - 2rem) !important;
+    margin-top: 0.25rem;
+    height: calc(100vh - 0.65rem) !important;
+    max-height: calc(100vh - 0.65rem) !important;
     min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -133,7 +157,7 @@ main [class*="st-key-chat_glass_panel"] {
     border: 1px solid rgba(255, 255, 255, 0.28) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
 }
-/* 2c. Right sidebar panel: same height as chat panel; top aligned */
+/* 2c. Right sidebar panel: same height as chat panel; extra bottom padding so last flowchart step is not clipped */
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"],
 main [class*="st-key-right_sidebar_panel"] {
     background: rgba(42, 50, 66, 0.62) !important;
@@ -142,13 +166,40 @@ main [class*="st-key-right_sidebar_panel"] {
     -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
     border-radius: 12px 0 0 12px !important;
     border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-    padding: 1.25rem 0.75rem 0.5rem 0.75rem !important;
-    margin-top: 0.5rem !important;
-    height: calc(100vh - 1.5rem) !important;
-    max-height: calc(100vh - 1.5rem) !important;
+    padding: 1.25rem 0.95rem 3rem 0.95rem !important;
+    margin-top: 0.25rem !important;
+    height: calc(100vh - 0.65rem) !important;
+    max-height: calc(100vh - 0.65rem) !important;
     min-height: 0 !important;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08) !important;
     margin-right: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: visible !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+/* Flowchart markdown: allow slight horizontal overflow so labels are not clipped in a narrow column */
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"],
+main [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] {
+    max-width: 100% !important;
+    overflow-x: visible !important;
+    box-sizing: border-box !important;
+}
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] > div,
+main [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] > div {
+    max-width: 100% !important;
+    overflow-x: visible !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+}
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"],
+main [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] label,
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] p,
@@ -220,7 +271,7 @@ main [class*="st-key-view_products_buttons"] {
     flex-direction: column !important;
     align-items: flex-start !important;
 }
-/* 3. Chat area: scrollable; flex so we can align user right; same height cap as chat panel */
+/* 3. Chat area: scrollable; flex so we can align user right */
 [data-testid="stAppViewContainer"] [class*="st-key-chat_area"],
 main [class*="st-key-chat_area"] {
     display: flex !important;
@@ -228,7 +279,10 @@ main [class*="st-key-chat_area"] {
     width: 100% !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
-    max-height: calc(100vh - 2rem) !important;
+    max-height: none !important;
+    padding-top: 0.45rem !important;
+    scroll-padding-top: 0.75rem !important;
+    scroll-padding-bottom: 0.5rem !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -503,7 +557,7 @@ def page_chatting():
     # When a workflow is active, use main column + right sidebar (flowchart, progress, current/next step)
     use_right_sidebar = bool(st.session_state.get("workflow"))
     if use_right_sidebar:
-        col_main, col_right = st.columns([2.8, 1])
+        col_main, col_right = st.columns([2.0, 1])
         ctx_main = col_main
     else:
         ctx_main = st.container()
@@ -512,7 +566,13 @@ def page_chatting():
     with ctx_main:
         with st.container(key="chat_glass_panel"):
             # Step 1. Header: title left, model provider dropdown top right
-            st.session_state.setdefault("ppr_provider", st.session_state.get("ppr_provider_sidebar", "openai"))
+            st.session_state.setdefault("ppr_provider", "openai")
+
+            def _sync_mpr_sidebar_from_header() -> None:
+                wf = st.session_state.get("workflow") or {}
+                if wf.get("name") == WorkFlows.WORKFLOW_MPR.value:
+                    st.session_state["mpr_provider_sidebar"] = st.session_state.get("ppr_provider", "openai")
+
             col_title, col_provider = st.columns([3, 1])  # provider column narrow; CSS pins dropdown right
             with col_title:
                 st.title(st.secrets.message.title)
@@ -524,9 +584,10 @@ def page_chatting():
                         format_func=lambda p: PROVIDER_LABELS.get(p, p.title()),
                         key="ppr_provider",
                         label_visibility="collapsed",
+                        on_change=_sync_mpr_sidebar_from_header,
                     )
 
-            # Step 2. Chat area container (messages + buttons + input) so message box is inside
+            # Step 2. Chat area (messages, buttons, thinking, input)
             with st.container(key="chat_area"):
                 # Chat history (assistant/user for bubble styling)
                 for message in st.session_state.messages:
@@ -594,24 +655,62 @@ def page_chatting():
                                     st.session_state.show_products_modal = True
                                     st.rerun()
 
-                # Step 3. While AI is generating: show "Thinking..." in a fixed-height slot so layout doesn't shift.
+                # Step 3. While AI is generating: show "Thinking..." (input stays visible below, disabled)
                 generation_in_progress = st.session_state.get("generation_in_progress", False)
                 messages = st.session_state.get("messages") or []
                 last_is_human = bool(messages and (messages[-1].get("role") or "").strip().lower() == "human")
+                _thinking = bool(generation_in_progress and last_is_human)
 
-                if generation_in_progress and last_is_human:
+                if _thinking:
                     with st.container(key="thinking_slot"):
                         with st.chat_message("assistant"):
                             st.markdown(
                                 'Thinking <span class="typing-dots"><span></span><span></span><span></span></span>',
                                 unsafe_allow_html=True,
                             )
+
+                human_message = st.chat_input(
+                    placeholder="Your message",
+                    disabled=_thinking,
+                    key="versa_chat_input",
+                )
+
+                _need_chat_scroll = _thinking or len(messages) > 1
+                if _need_chat_scroll:
+                    components.html(
+                        """
+                        <script>
+                        (function () {
+                          try {
+                            var doc = window.parent.document;
+                            function sc() {
+                              var el = doc.querySelector('[class*="st-key-chat_area"]');
+                              if (!el) return;
+                              var sh = el.scrollHeight, ch = el.clientHeight;
+                              if (sh <= ch + 12) {
+                                el.scrollTop = 0;
+                              } else {
+                                el.scrollTop = sh;
+                              }
+                            }
+                            sc();
+                            setTimeout(sc, 50);
+                            setTimeout(sc, 150);
+                            setTimeout(sc, 400);
+                            setTimeout(sc, 900);
+                          } catch (e) {}
+                        })();
+                        </script>
+                        """,
+                        height=1,
+                        width=1,
+                    )
+
+                if _thinking:
                     provider = st.session_state.get("ppr_provider", "openai")
                     routing(messages[-1]["content"], provider=provider)
                     return
 
-                # Step 4. Chat input inside container (message box appears inside the gray area)
-                human_message = st.chat_input()
                 if human_message:
                     st.chat_message("user").write(human_message)
                     st.session_state.messages.append({"role": "Human", "content": human_message})

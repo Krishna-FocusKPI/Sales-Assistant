@@ -132,7 +132,17 @@ PPR_PROMPT_SUGGESTIONS = """Try asking:
 - *Validate logo* (e.g. provide the company or logo name)
 - *Product recommendations* (e.g. recommend a category or get products once distributor and logo are set)
 - *Customize list* (filter, add or remove products)
-- *Build deck* (create the sales deck when ready)"""
+- *Logo sales analysis* (e.g. "Run logo sales analysis" — required before building the deck)
+- *Build deck* (create the sales deck when ready)
+
+**Sample values (smoke test)** — use with bundled workflow pickles / `secrets.example.toml` categories:
+| Step | Example you can paste |
+| --- | --- |
+| Distributor ID | `246662` |
+| Logo (company) | `KOHLER CO.` |
+| Category (after logo) | `Drinkware`, `Bags`, `Technology`, `Apparel`, `Stationery`, or `home & outdoor` |
+| Later | `Add top 5`, `Run logo sales analysis`, then `Build the deck` |
+"""
 
 
 @st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
@@ -214,6 +224,11 @@ def _recommendation_tab():
     st.write(f"* Category: {getattr(memory, 'category', '—')}")
     with st.expander("See the complete list of products"):
         st.dataframe(all_available_products)
+
+def _prompt_tab():
+    """Same copy as the sidebar Prompt suggestions modal."""
+    st.markdown(PPR_PROMPT_SUGGESTIONS)
+
 
 def page_support():
     workflow_name = st.session_state.workflow.get("name", "PPR")

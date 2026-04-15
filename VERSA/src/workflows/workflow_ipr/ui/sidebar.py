@@ -1,5 +1,7 @@
 import streamlit as st
 
+from src.common.deck_download_ui import render_deck_download_if_ready
+
 from .support import _has_product_data, _has_selected_products
 
 
@@ -12,20 +14,6 @@ def clear_workflow():
 
 
 def page_sidebar():
-    # Light background for modal-opener buttons so text is readable (avoid white-on-white)
-    st.sidebar.markdown(
-        """
-        <style>
-        [data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-            background-color: rgba(255, 255, 255, 0.12) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #1f2937 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
     st.sidebar.caption("Open in modal")
     if _has_product_data():
         if st.sidebar.button("Recommended products", key="ipr_sidebar_products"):
@@ -44,6 +32,9 @@ def page_sidebar():
     if st.sidebar.button("NAICS code list", key="ipr_sidebar_naics"):
         st.session_state.show_naics_modal = True
         st.rerun()
+
+    render_deck_download_if_ready(key_prefix="versa_deck")
+
     st.sidebar.divider()
     if st.sidebar.button("End current workflow", type="primary", key="ipr_sidebar_end"):
         st.session_state.show_end_workflow_confirm = True

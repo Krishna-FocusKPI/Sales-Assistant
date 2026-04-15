@@ -41,7 +41,15 @@ def _has_product_data():
 MPR_PROMPT_SUGGESTIONS = """Try asking:
 - *Validate a distributor* (e.g. "Distributor 246662" or your distributor ID)
 - *Validate a category* (e.g. "Bags" or your product category)
-- *Get recommendations* (e.g. "Give me product recommendations" once distributor and category are set)"""
+- *Get recommendations* (e.g. "Give me product recommendations" once distributor and category are set)
+
+**Sample values (smoke test)** — distributor + category from `secrets.example.toml` `[mpr.categories]`:
+| Step | Example you can paste |
+| --- | --- |
+| Distributor ID | `246662` |
+| Category | `Drinkware`, `Bags`, `Technology`, `Apparel`, `Stationery`, or `home & outdoor` |
+| Then | `Give me product recommendations` |
+"""
 
 
 @st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)

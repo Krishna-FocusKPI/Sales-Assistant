@@ -59,3 +59,4 @@ class WorkFlowMemory:
     news_analysis: dict = None
     
     deck_name = None
+    deck_path: str = None

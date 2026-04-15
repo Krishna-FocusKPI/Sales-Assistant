@@ -77,7 +77,15 @@ IPR_PROMPT_SUGGESTIONS = """Try these in the chat to move the IPR workflow along
 - **Filter:** e.g. "Show me items under $20" or "blue tumblers"
 - **Add products:** e.g. "Add top 3" or "Add product 1234-56"
 - **Remove:** e.g. "Remove product 1234-56"
-- **Build deck:** e.g. "Build the deck" when you're ready"""
+- **Build deck:** e.g. "Build the deck" when you're ready
+
+**Sample values (smoke test)** — NAICS labels match `.versa/workflows/naics_code_mapping.csv`; categories match `[ipr.categories]` in `secrets.example.toml`:
+| Step | Example you can paste |
+| --- | --- |
+| NAICS code | `23` → *Construction*; `541512` → *Computer Systems Design Services* |
+| Category (after NAICS) | `Drinkware`, `Bags`, `Technology`, `Apparel`, `Stationery`, or `home & outdoor` |
+| Then | `Get product recommendations` → customize list → `Build the deck` |
+"""
 
 
 @st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
