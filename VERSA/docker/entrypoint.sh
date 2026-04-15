@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Path to the data directory
+# Path to the data directory (Docker volume on Droplet, or local dir on App Platform)
 DATA_PATH="/.versa"
-
-# Check if the data path is empty
-if [ -d "$DATA_PATH" ]; then
-    echo "Mounted volume found at $DATA_PATH. Creating subdirectories..."
-else
-    echo "No mounted volume found. Exiting..."
-    # Create the data directory if it doesn't exist
-    exit 1
+if [ ! -d "$DATA_PATH" ]; then
+    echo "Creating $DATA_PATH (ephemeral unless a volume is mounted)."
+    mkdir -p "$DATA_PATH"
 fi
 
 # Create subdirectories for dags
@@ -43,16 +38,20 @@ else
     mv /app/workflows/* $WORKFLOW_PATH
 fi
 
-#
+# Secrets: App Platform / CI often inject VERSA_STREAMLIT_SECRETS_B64 (base64 of full secrets.toml)
 CONFIG_PATH=$DATA_PATH/secrets.toml
-if [ -f "$CONFIG_PATH" ]; then
-    echo "File secrets.toml exists. Replacing current config."
-    # Copy the file from /data/folder/secrets.toml to the destination
-    cp $CONFIG_PATH /app/.streamlit/secrets.toml
+if [ -n "${VERSA_STREAMLIT_SECRETS_B64:-}" ]; then
+    echo "Writing /app/.streamlit/secrets.toml from VERSA_STREAMLIT_SECRETS_B64"
+    if ! printf '%s' "$VERSA_STREAMLIT_SECRETS_B64" | base64 -d > /app/.streamlit/secrets.toml; then
+        echo "ERROR: VERSA_STREAMLIT_SECRETS_B64 could not be base64-decoded."
+        exit 1
+    fi
+elif [ -f "$CONFIG_PATH" ]; then
+    echo "File secrets.toml exists at $CONFIG_PATH. Replacing image default."
+    cp "$CONFIG_PATH" /app/.streamlit/secrets.toml
 else
-    echo "File secrets.toml not found. Using default config."
+    echo "No VERSA_STREAMLIT_SECRETS_B64 and no $CONFIG_PATH — using image default secrets."
 fi
-
 
 # Continue with the normal execution of the container's main process
 exec "$@"

@@ -13,9 +13,9 @@ COPY ./run.py /app/run.py
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy a runnable config file in
-RUN mkdir /app/.streamlit
-COPY ./.versa/secrets.toml /app/.streamlit/secrets.toml
+# Default Streamlit secrets (no real keys). Production: VERSA_STREAMLIT_SECRETS_B64 or /.versa/secrets.toml.
+RUN mkdir -p /app/.streamlit /.versa
+COPY ./.versa/secrets.example.toml /app/.streamlit/secrets.toml
 
 # make a directory for images
 RUN mkdir /images
