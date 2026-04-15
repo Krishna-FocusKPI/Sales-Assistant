@@ -12,6 +12,7 @@ except ImportError:
 from PIL import Image
 
 from src.common.workflow_context import get_workflow
+from src.utils.deck_ttl_cleanup import cleanup_expired_generated_decks
 from src.utils.versa_paths import get_versa_downloads_dir, resolve_workflow_path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
@@ -94,6 +95,10 @@ class BuildDeck(BaseTool):
         memory = workflow['workflow_memory']
         memory.deck_name = filename
         memory.deck_path = save_dir
+        try:
+            cleanup_expired_generated_decks(force=True)
+        except Exception:
+            logging.getLogger(__name__).debug("Deck TTL cleanup after build failed", exc_info=True)
 
         to_next = workflow['to_next_memory']
         to_next.reset()

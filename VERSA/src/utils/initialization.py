@@ -1,6 +1,8 @@
 import logging
 import sys
 import streamlit as st
+
+from src.utils.deck_ttl_cleanup import cleanup_expired_generated_decks
 from src.workflows.workflow_ipr.cache import cache_naics_code
 from src.workflows.workflow_ipr.cache import cache_product as cache_ipr_product
 from src.workflows.workflow_ppr.cache import cache_distributor as cache_ppr_distributor
@@ -67,7 +69,11 @@ def init_in_session_chat_history():
 
 def initialization():
     setup_logger()
-    
+    try:
+        cleanup_expired_generated_decks()
+    except Exception:
+        logging.getLogger(__name__).debug("Deck TTL cleanup skipped", exc_info=True)
+
     # init session object
     init_in_session_chat_history()
     init_in_session_workflow()
