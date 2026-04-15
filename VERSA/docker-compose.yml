@@ -3,6 +3,8 @@ services:
     build: .
     image: versa:latest
     container_name: versa
+    environment:
+      - VERSA_BASE_URL_PATH=/salesbuilder
     volumes:
       - /usr/share/nginx/html/:/downloads
       - config:/.versa
