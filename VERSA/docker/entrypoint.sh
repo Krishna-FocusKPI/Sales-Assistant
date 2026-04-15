@@ -55,5 +55,53 @@ else
     echo "No VERSA_STREAMLIT_SECRETS_B64 and no $CONFIG_PATH — using image default secrets."
 fi
 
+# Safe preview for Runtime logs (redacts api_key, passwords, tokens — never print raw secrets)
+if [ -f /app/.streamlit/secrets.toml ]; then
+    echo "---- /app/.streamlit/secrets.toml diagnostics (redacted) ----"
+    python3 <<'PY'
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+path = Path("/app/.streamlit/secrets.toml")
+raw = path.read_text(encoding="utf-8", errors="replace")
+print(f"path={path} bytes={path.stat().st_size}")
+sections = re.findall(r"^\s*\[([^\]]+)\]", raw, flags=re.MULTILINE)
+print("sections:", sections if sections else "(none parsed)")
+openai_ok = any(s.strip().lower() == "openai" for s in sections)
+print("[openai] section present:", openai_ok)
+
+
+def redact_line(line: str) -> str:
+    m = re.match(r"^(\s*)([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$", line)
+    if not m:
+        return line.rstrip()[:220]
+    key = m.group(2).lower()
+    if any(
+        p in key
+        for p in (
+            "password",
+            "secret",
+            "api_key",
+            "token",
+            "slt",
+            "credential",
+            "private",
+        )
+    ):
+        return f"{m.group(1)}{m.group(2)} = <REDACTED>"
+    return line.rstrip()[:220]
+
+
+print("--- first 45 lines (redacted) ---")
+for i, line in enumerate(raw.splitlines()[:45], 1):
+    print(f"{i:3}| {redact_line(line)}")
+print("---- end secrets diagnostics ----")
+PY
+else
+    echo "WARNING: /app/.streamlit/secrets.toml missing after secrets step."
+fi
+
 # Continue with the normal execution of the container's main process
 exec "$@"
