@@ -42,7 +42,9 @@ fi
 CONFIG_PATH=$DATA_PATH/secrets.toml
 if [ -n "${VERSA_STREAMLIT_SECRETS_B64:-}" ]; then
     echo "Writing /app/.streamlit/secrets.toml from VERSA_STREAMLIT_SECRETS_B64"
-    if ! printf '%s' "$VERSA_STREAMLIT_SECRETS_B64" | base64 -d > /app/.streamlit/secrets.toml; then
+    # Strip CR/LF from pasted env values (common in dashboards) so base64 decodes correctly
+    _b64=$(printf '%s' "${VERSA_STREAMLIT_SECRETS_B64}" | tr -d '\n\r')
+    if ! printf '%s' "$_b64" | base64 -d > /app/.streamlit/secrets.toml; then
         echo "ERROR: VERSA_STREAMLIT_SECRETS_B64 could not be base64-decoded."
         exit 1
     fi

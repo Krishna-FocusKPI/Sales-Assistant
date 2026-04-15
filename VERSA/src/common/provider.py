@@ -22,43 +22,56 @@ OPENAI_EMBEDDING_MODEL_DEFAULT = "text-embedding-3-small"
 OPENAI_EMBEDDING_MODELS = ("text-embedding-3-small", "text-embedding-3-large", "text-embedding-ada-002")
 
 
+def _st_secrets_get(section: str, field: str) -> str:
+    """Read st.secrets[section][field] using bracket access (works when hasattr(section) is unreliable)."""
+    try:
+        import streamlit as st
+        if section not in st.secrets:
+            return ""
+        node = st.secrets[section]
+        if isinstance(node, dict):
+            return str(node.get(field, "") or "").strip()
+        if hasattr(node, field):
+            return str(getattr(node, field, "") or "").strip()
+        return str(node[field] or "").strip()
+    except Exception:
+        return ""
+
+
 def get_default_provider() -> ProviderName:
     """Default LLM provider for CBT and other flows. From env LLM_PROVIDER or st.secrets, else 'openai'."""
     value = os.environ.get("LLM_PROVIDER", "").strip().lower()
     if value in SUPPORTED_PROVIDERS:
         return value  # type: ignore
-    try:
-        import streamlit as st
-        if hasattr(st.secrets, "llm") and hasattr(st.secrets.llm, "provider"):
-            p = str(getattr(st.secrets.llm, "provider", "")).strip().lower()
-            if p in SUPPORTED_PROVIDERS:
-                return p  # type: ignore
-    except Exception:
-        pass
+    p = _st_secrets_get("llm", "provider").lower()
+    if p in SUPPORTED_PROVIDERS:
+        return p  # type: ignore
     return "openai"
 
 
 def _get_config(key: str, default: str = "") -> str:
-    """Read config from env; in Streamlit, optionally from st.secrets (e.g. st.secrets.openai.api_key)."""
+    """Read config from env; in Streamlit, from st.secrets ([openai], [anthropic], [embedding])."""
     value = os.environ.get(key, default).strip()
     if value:
         return value
-    try:
-        import streamlit as st
-        if key == "OPENAI_API_KEY" and hasattr(st.secrets, "openai"):
-            return getattr(st.secrets.openai, "api_key", "").strip()
-        if key == "OPENAI_MODEL" and hasattr(st.secrets, "openai"):
-            return getattr(st.secrets.openai, "model", "").strip()
-        if key == "OPENAI_EMBEDDING_MODEL" and hasattr(st.secrets, "openai"):
-            return getattr(st.secrets.openai, "embedding_model", "").strip()
-        if key == "ANTHROPIC_API_KEY" and hasattr(st.secrets, "anthropic"):
-            return getattr(st.secrets.anthropic, "api_key", "").strip()
-        if key == "ANTHROPIC_MODEL" and hasattr(st.secrets, "anthropic"):
-            return getattr(st.secrets.anthropic, "model", "").strip()
-        if key == "EMBEDDING_PROVIDER" and hasattr(st.secrets, "embedding"):
-            return getattr(st.secrets.embedding, "provider", "").strip()
-    except Exception:
-        pass
+    if key == "OPENAI_API_KEY":
+        v = _st_secrets_get("openai", "api_key")
+        return v if v else ""
+    if key == "OPENAI_MODEL":
+        v = _st_secrets_get("openai", "model")
+        return v if v else ""
+    if key == "OPENAI_EMBEDDING_MODEL":
+        v = _st_secrets_get("openai", "embedding_model")
+        return v if v else ""
+    if key == "ANTHROPIC_API_KEY":
+        v = _st_secrets_get("anthropic", "api_key")
+        return v if v else ""
+    if key == "ANTHROPIC_MODEL":
+        v = _st_secrets_get("anthropic", "model")
+        return v if v else ""
+    if key == "EMBEDDING_PROVIDER":
+        v = _st_secrets_get("embedding", "provider")
+        return v if v else ""
     return ""
 
 
@@ -78,9 +91,15 @@ def get_chat_model(
         api_key = kwargs.get("api_key") or _get_config("OPENAI_API_KEY")
         model_name = model or kwargs.get("model") or _get_config("OPENAI_MODEL")
         if not api_key:
-            raise ValueError("OPENAI_API_KEY (or api_key) is required for provider 'openai'")
+            raise ValueError(
+                "OpenAI API key missing. Set env OPENAI_API_KEY or secrets.toml section [openai] with api_key=.... "
+                "On DigitalOcean App Platform, set the Web Service secret VERSA_STREAMLIT_SECRETS_B64 to the "
+                "base64 encoding of your full secrets.toml (UTF-8), redeploy, and check Runtime logs for decode errors."
+            )
         if not model_name:
-            raise ValueError("OPENAI_MODEL must be set in secrets or env for provider 'openai'")
+            raise ValueError(
+                "OPENAI_MODEL missing. Set env OPENAI_MODEL or [openai] model in secrets.toml."
+            )
         from langchain_openai import ChatOpenAI
         return ChatOpenAI(
             model=model_name,
@@ -110,14 +129,9 @@ def _get_embedding_provider() -> str:
     value = os.environ.get("EMBEDDING_PROVIDER", "").strip().lower()
     if value in SUPPORTED_PROVIDERS:
         return value
-    try:
-        import streamlit as st
-        if hasattr(st.secrets, "embedding") and hasattr(st.secrets.embedding, "provider"):
-            p = str(getattr(st.secrets.embedding, "provider", "")).strip().lower()
-            if p in SUPPORTED_PROVIDERS:
-                return p
-    except Exception:
-        pass
+    p = _st_secrets_get("embedding", "provider").lower()
+    if p in SUPPORTED_PROVIDERS:
+        return p
     return "openai"
 
 
