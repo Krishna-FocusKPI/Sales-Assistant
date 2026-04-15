@@ -5,6 +5,7 @@ services:
     container_name: versa
     environment:
       - VERSA_BASE_URL_PATH=/salesbuilder
+      - VERSA_DATA_ROOT=/.versa
     volumes:
       - /usr/share/nginx/html/:/downloads
       - config:/.versa

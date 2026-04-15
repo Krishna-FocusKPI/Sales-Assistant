@@ -38,6 +38,11 @@ else
     mv /app/workflows/* $WORKFLOW_PATH
 fi
 
+DOWNLOADS_PATH=$DATA_PATH/downloads
+if [ ! -d "$DOWNLOADS_PATH" ]; then
+    mkdir -p "$DOWNLOADS_PATH"
+fi
+
 # Secrets: App Platform / CI often inject VERSA_STREAMLIT_SECRETS_B64 (base64 of full secrets.toml)
 CONFIG_PATH=$DATA_PATH/secrets.toml
 if [ -n "${VERSA_STREAMLIT_SECRETS_B64:-}" ]; then

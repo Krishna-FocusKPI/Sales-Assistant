@@ -1,6 +1,9 @@
 # Use an official Python runtime as a parent image
 FROM python:3.11
 
+# Match entrypoint DATA_PATH=/.versa so versa_paths loads pickles/CSVs from /.versa/workflows
+ENV VERSA_DATA_ROOT=/.versa
+
 # Set the working directory in the container
 WORKDIR /app
 

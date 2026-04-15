@@ -11,7 +11,7 @@ except ImportError:
     from langchain.tools import BaseTool
 
 from src.common.workflow_context import get_workflow
-from src.utils.versa_paths import get_project_root, resolve_workflow_path
+from src.utils.versa_paths import get_versa_downloads_dir, resolve_workflow_path
 from PIL import Image
 
 
@@ -121,7 +121,7 @@ class BuildDeck(BaseTool):
             # Use project .versa/downloads when configured path doesn't exist (e.g. /downloads on Windows)
             save_path = save_path.replace("\\", "/").rstrip("/")
             if not os.path.isdir(save_path):
-                fallback = get_project_root() / ".versa" / "downloads"
+                fallback = get_versa_downloads_dir()
                 save_path = str(fallback)
             os.makedirs(save_path, exist_ok=True)
             save_dir = os.path.join(save_path, filename)

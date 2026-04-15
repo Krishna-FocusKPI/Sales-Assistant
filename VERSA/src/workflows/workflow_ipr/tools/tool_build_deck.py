@@ -12,7 +12,7 @@ except ImportError:
 from PIL import Image
 
 from src.common.workflow_context import get_workflow
-from src.utils.versa_paths import get_project_root, resolve_workflow_path
+from src.utils.versa_paths import get_versa_downloads_dir, resolve_workflow_path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_VERTICAL_ANCHOR as MSO_ANCHOR
@@ -74,7 +74,7 @@ class BuildDeck(BaseTool):
             except (AttributeError, KeyError, TypeError):
                 save_path = ""
             if not save_path or not os.path.isdir(save_path):
-                save_path = str(get_project_root() / ".versa" / "downloads")
+                save_path = str(get_versa_downloads_dir())
             os.makedirs(save_path, exist_ok=True)
             save_dir = os.path.join(save_path, filename)
             deck.save(save_dir)

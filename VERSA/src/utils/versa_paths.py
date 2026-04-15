@@ -1,6 +1,9 @@
 """
 Shared paths for .versa/workflows cache files.
 Use this instead of hard-coded '/.versa/workflows/...' so paths work on all systems.
+
+Docker / entrypoint stores workflow files under `/.versa/workflows`. Set env VERSA_DATA_ROOT=/.versa
+so lookups match (see Dockerfile). Locally, omit VERSA_DATA_ROOT to use <project>/.versa/...
 """
 import logging
 import os
@@ -16,9 +19,25 @@ def get_project_root() -> Path:
     return Path(__file__).resolve().parent.parent.parent
 
 
+def get_versa_data_root() -> Path:
+    """
+    Root for runtime .versa data (workflows pick/CSV, downloads, etc.).
+    VERSA_DATA_ROOT overrides (e.g. /.versa in Docker); default is <project>/.versa.
+    """
+    override = (os.environ.get("VERSA_DATA_ROOT") or "").strip()
+    if override:
+        return Path(override)
+    return get_project_root() / ".versa"
+
+
 def get_workflow_cache_path(filename: str) -> Path:
-    """Path to a file under project_root/.versa/workflows/<filename>."""
-    return get_project_root() / ".versa" / "workflows" / filename
+    """Path to a file under <versa_data_root>/workflows/<filename>."""
+    return get_versa_data_root() / "workflows" / filename
+
+
+def get_versa_downloads_dir() -> Path:
+    """Directory for generated decks / downloads under the same versa root."""
+    return get_versa_data_root() / "downloads"
 
 
 def resolve_workflow_path(path_or_filename: str) -> str:
