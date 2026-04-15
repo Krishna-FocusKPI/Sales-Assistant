@@ -117,13 +117,6 @@ def _ipr_current_index(workflow: dict) -> int:
 # -----------------------------------------------------------------------------
 # API for right sidebar
 # -----------------------------------------------------------------------------
-def get_next_step_index(workflow_name: str, current_index: int, total: int) -> int:
-    """Index of the next recommended step (or total for Complete)."""
-    if current_index >= total - 1:
-        return total  # Complete
-    return current_index + 1
-
-
 def get_flow_steps(workflow_name: str) -> list[str]:
     """Return the list of step labels for the given workflow, or empty if unknown."""
     if workflow_name == WorkFlows.WORKFLOW_PPR.value:

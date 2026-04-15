@@ -52,8 +52,7 @@ MPR_PROMPT_SUGGESTIONS = """Try asking:
 """
 
 
-@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
-def show_params_modal():
+def render_mpr_params_panel() -> None:
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -72,14 +71,12 @@ def show_params_modal():
     st.dataframe(params_df, use_container_width=True, hide_index=True)
 
 
-@st.dialog("Prompt suggestions", width="large", dismissible=True, on_dismiss=_clear_prompt_modal_flag)
-def show_prompt_modal():
-    st.write("#### Prompt Suggestions")
+def render_mpr_prompts_panel() -> None:
+    st.write("#### Prompt suggestions")
     st.markdown(MPR_PROMPT_SUGGESTIONS)
 
 
-@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
-def show_products_modal():
+def render_mpr_products_panel() -> None:
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -109,6 +106,21 @@ def show_products_modal():
         st.dataframe(all_available_products, use_container_width=True)
     else:
         st.write("No full list available.")
+
+
+@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
+def show_params_modal():
+    render_mpr_params_panel()
+
+
+@st.dialog("Prompt suggestions", width="large", dismissible=True, on_dismiss=_clear_prompt_modal_flag)
+def show_prompt_modal():
+    render_mpr_prompts_panel()
+
+
+@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
+def show_products_modal():
+    render_mpr_products_panel()
 
 
 @st.dialog("End workflow?", width="small", dismissible=True, on_dismiss=_clear_end_workflow_confirm_flag)

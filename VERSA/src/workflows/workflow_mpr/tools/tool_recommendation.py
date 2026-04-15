@@ -81,13 +81,14 @@ class ProductRecommendation(BaseTool):
         to_next.reset()
         to_next.decision = "SUCCESS"
         to_next.source = self.name
-        # Include actual product list in the message so the agent cites real recommendations, not made-up ones
-        summary = _format_recommendation_summary(
-            recomendations,
-            getattr(memory, "distributor_name", None) or getattr(memory, "distributor_id", "") or "the distributor",
-            getattr(memory, "category", "") or "N/A",
+        n_full = len(all_available_products) if all_available_products is not None else 0
+        dist = getattr(memory, "distributor_name", None) or getattr(memory, "distributor_id", "") or "the distributor"
+        to_next.message = (
+            f"Successfully loaded {n_full} product row(s) for category {getattr(memory, 'category', '')!r} "
+            f"(distributor {dist!r}). "
+            "The user sees the **full** recommendation table in the chat after your reply—give a short intro only; "
+            "do not invent SKUs or re-list every line in prose."
         )
-        to_next.message = summary
 
         logging.info(f"* Sucessfully get the recommendations.")
         return to_next.message
@@ -107,26 +108,6 @@ class ProductRecommendation(BaseTool):
 # =============================================================================
 # DATA HANDLING
 # =============================================================================
-def _format_recommendation_summary(recommendations: DataFrame, distributor_label: str, category: str) -> str:
-    """Build a short summary of the actual recommended products so the agent can cite them instead of inventing names."""
-    if recommendations is None or recommendations.empty:
-        return "Successfully retrieved recommendations (no items in list)."
-    name_col = "ITEM_NAME" if "ITEM_NAME" in recommendations.columns else None
-    id_col = "ITEM_ID" if "ITEM_ID" in recommendations.columns else None
-    lines = [
-        f"Successfully retrieved {len(recommendations)} product recommendations for distributor {distributor_label} in category: {category or 'N/A'}.",
-        "Use only the following list when telling the user what was recommended (do not invent or substitute other products):",
-    ]
-    for i, row in recommendations.iterrows():
-        name = row.get(name_col, row.get(id_col, "—")) if name_col or id_col else "—"
-        item_id = row.get(id_col, "") if id_col else ""
-        if name_col and id_col and str(name) != str(item_id):
-            lines.append(f"  - {name} (Item: {item_id})")
-        else:
-            lines.append(f"  - {name}")
-    return "\n".join(lines)
-
-
 def _fetch_recommendation_list_from_SF(distributor_id, category) -> DataFrame:
     """
     Fetches recommended product data for a given logo and category.

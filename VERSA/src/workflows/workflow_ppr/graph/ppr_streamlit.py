@@ -7,6 +7,8 @@ import logging
 import streamlit as st
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMessage
 
+from src.common.chat_products_embed import build_products_chat_embed_from_memory
+
 from .ppr_graph import build_ppr_graph
 from .ppr_state import PPRState
 
@@ -71,7 +73,16 @@ def run_ppr_turn(user_message: str, *, provider: str = "openai") -> None:
             break
 
     if final_content is not None:
-        msg = {"role": "AI", "content": final_content}
+        content = final_content if isinstance(final_content, str) else str(final_content)
+        products_chat_embed = None
+        if activity and "product_recommendation" in activity:
+            wf = st.session_state.get("workflow") or {}
+            mem = wf.get("workflow_memory")
+            if mem is not None:
+                products_chat_embed = build_products_chat_embed_from_memory(mem, variant="ppr")
+        msg = {"role": "AI", "content": content}
+        if products_chat_embed:
+            msg["products_chat_embed"] = products_chat_embed
         if activity:
             msg["activity"] = activity
         st.session_state.messages.append(msg)

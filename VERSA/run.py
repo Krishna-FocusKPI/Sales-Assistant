@@ -1,12 +1,19 @@
 import warnings
 
+import streamlit as st
+import streamlit.components.v1 as components
+
+try:
+    st.set_page_config(layout="wide", page_title="Sales Assistant", menu_items=None)
+except Exception:
+    pass
+
+from src.common.chat_products_embed import render_products_chat_embed
+from src.common.deck_download_ui import dismiss_chat_deck_offer_if_deck_ready, render_chat_deck_download_if_ready
 from src.common.provider import SUPPORTED_PROVIDERS
 from src.utils.initialization import initialization
 from src.workflows.workflows import routing
 from src.workflows import WorkFlows
-import streamlit as st
-import streamlit.components.v1 as components
-
 
 warnings.filterwarnings("ignore")
 
@@ -26,11 +33,20 @@ PROVIDER_LABELS = {"openai": "OpenAI", "anthropic": "Anthropic"}
 #   https://images.unsplash.com/photo-1579546929518-9e396f3cc809          (gradient night sky)
 #   https://images.unsplash.com/photo-1518709268805-4e9042af9f23          (milky way 2)
 #   https://images.unsplash.com/photo-1507400492013-162706c8c05e          (starry sky)
-BACKGROUND_IMAGE_URL = "https://images.unsplash.com/photo-1519681393784-d120267933ba"
+BACKGROUND_IMAGE_URL = ""
 
-# Chat UI: frosted glass container; bubbles/input/dropdown = more opaque so they stand out from background
+# Chat UI: light theme — white surfaces, black text (no background image)
 CHAT_CONTAINER_CSS = """
 <style>
+/* 0. App base: white background, black text */
+html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+}
+.stApp {
+    background: #ffffff !important;
+    color: #111111 !important;
+}
 /* 0. Hide top toolbar/header bar (Deploy, menu, decoration) */
 header[data-testid="stHeader"],
 [data-testid="stHeader"],
@@ -43,38 +59,70 @@ footer {
     visibility: hidden !important;
     display: none !important;
 }
-/* 0b. Sidebar: darker panel so labels and controls stay readable over bright backgrounds */
+/* 0b. Sidebar: light panel */
 section[data-testid="stSidebar"],
 section.stSidebar,
 [data-testid="stSidebar"] {
-    background: rgba(12, 16, 28, 0.94) !important;
-    background-color: rgba(12, 16, 28, 0.94) !important;
-    backdrop-filter: blur(12px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: #f4f4f4 !important;
+    background-color: #f4f4f4 !important;
+    border-right: 1px solid #d0d0d0 !important;
 }
 [data-testid="stSidebar"] > div,
 section.stSidebar > div {
     background: transparent !important;
 }
-/* Left sidebar: keep “End current workflow” button text on one line */
-[data-testid="stSidebar"] button,
-section[data-testid="stSidebar"] button {
+/*
+ * Sidebar action buttons only — do NOT target tab row buttons.
+ * A global `[data-testid="stSidebar"] button` rule breaks `st.tabs`: it forces
+ * min-width: fit-content on tab pills and they overlap when we also flex them.
+ */
+[data-testid="stSidebar"] .stButton > button,
+section[data-testid="stSidebar"] .stButton > button {
     white-space: nowrap !important;
     min-width: fit-content !important;
 }
-/* Sidebar secondary + download: dark chips, white text (readable on dark panel) */
+/* Sidebar secondary + download: light chips, black text */
 [data-testid="stSidebar"] .stButton > button[kind="secondary"],
 section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-    background-color: rgba(48, 58, 88, 0.98) !important;
-    color: rgba(255, 255, 255, 0.96) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: #e8e8e8 !important;
+    color: #111111 !important;
+    border: 1px solid #c8c8c8 !important;
 }
 [data-testid="stSidebar"] [data-testid="stDownloadButton"] button,
 [data-testid="stSidebar"] [data-testid="stDownloadButton"] > button {
-    background-color: rgba(48, 58, 88, 0.98) !important;
-    color: rgba(255, 255, 255, 0.96) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: #e8e8e8 !important;
+    color: #111111 !important;
+    border: 1px solid #c8c8c8 !important;
+}
+/* End current workflow (right workflow column primary) */
+[class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"],
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"],
+main [class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"] {
+    white-space: nowrap !important;
+    min-width: fit-content !important;
+    background-color: #d32f2f !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #b71c1c !important;
+}
+[class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"]:hover,
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"]:hover,
+main [class*="st-key-right_sidebar_panel"] .stButton > button[kind="primary"]:hover {
+    background-color: #c62828 !important;
+    color: #ffffff !important;
+}
+/* End workflow confirm in dialog (portaled; primary in this container only) */
+[class*="st-key-end_wf_modal_actions"] .stButton > button[kind="primary"],
+[data-testid="stAppViewContainer"] [class*="st-key-end_wf_modal_actions"] .stButton > button[kind="primary"],
+main [class*="st-key-end_wf_modal_actions"] .stButton > button[kind="primary"] {
+    background-color: #d32f2f !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #b71c1c !important;
+}
+[class*="st-key-end_wf_modal_actions"] .stButton > button[kind="primary"]:hover {
+    background-color: #c62828 !important;
+    color: #ffffff !important;
 }
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] p,
@@ -82,7 +130,33 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
 section.stSidebar label,
 section.stSidebar p,
 section.stSidebar span {
-    color: rgba(255, 255, 255, 0.95) !important;
+    color: #111111 !important;
+}
+/* Left sidebar: workflow tabs — equal flex slots, no min-width:fit-content (see above) */
+section[data-testid="stSidebar"] [data-testid="stTabs"] [role="tablist"] {
+    display: flex !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+}
+section[data-testid="stSidebar"] [data-testid="stTabs"] [role="tablist"] > [role="tab"],
+section[data-testid="stSidebar"] [data-testid="stTabs"] [role="tablist"] button {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+/* Chat column: deck download matches secondary chip style */
+[class*="st-key-chat_deck_slot"] [data-testid="stDownloadButton"] button,
+[class*="st-key-chat_deck_slot"] [data-testid="stDownloadButton"] > button {
+    width: 100% !important;
+    background-color: #e8e8e8 !important;
+    color: #111111 !important;
+    border: 1px solid #c8c8c8 !important;
 }
 /* 1. Disable main scroll: only the chat area should scroll */
 .stApp,
@@ -93,7 +167,7 @@ main {
     height: 100vh !important;
     max-height: 100vh !important;
 }
-/* 1b. Ensure all wrappers are transparent so background image shows through to the glass panel. */
+/* 1b. Main wrappers: white (no background image) */
 [data-testid="stAppViewContainer"] > div,
 main > div,
 main > div > div,
@@ -102,8 +176,8 @@ section.main,
 section[data-testid="stAppViewContainer"],
 div:has(> [data-testid="stMainBlockContainer"]),
 div:has(> .block-container) {
-    background: transparent !important;
-    background-color: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
 }
 /* 2. Main block container: transparent, no overflow so main scroll stays disabled */
 [data-testid="stMainBlockContainer"],
@@ -111,8 +185,8 @@ div:has(> .block-container) {
 main .block-container,
 [data-testid="stAppViewContainer"] [class*="block-container"],
 main [class*="block-container"] {
-    background: transparent !important;
-    background-color: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     padding: 0 !important;
     min-height: auto !important;
     max-height: 100vh !important;
@@ -137,13 +211,11 @@ main .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="c
 main .block-container:has([class*="st-key-right_sidebar_panel"]) [data-testid="column"]:last-child {
     min-width: min(100%, 280px) !important;
 }
-/* 2b. Chat panel only: light frosted glass; fixed height so only chat area scrolls */
+/* 2b. Chat panel: solid white; fixed height so only chat area scrolls */
 [data-testid="stAppViewContainer"] [class*="st-key-chat_glass_panel"],
 main [class*="st-key-chat_glass_panel"] {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(250, 252, 255, 0.04) 100%) !important;
-    background-color: rgba(255, 255, 255, 0.06) !important;
-    backdrop-filter: blur(24px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     border-radius: 12px;
     padding: 1.25rem 1.5rem !important;
     margin-top: 0.25rem;
@@ -154,30 +226,38 @@ main [class*="st-key-chat_glass_panel"] {
     flex-direction: column !important;
     overflow: hidden !important;
     width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #d0d0d0 !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+    color: #111111 !important;
 }
-/* 2c. Right sidebar panel: same height as chat panel; extra bottom padding so last flowchart step is not clipped */
+[data-testid="stAppViewContainer"] [class*="st-key-chat_glass_panel"] h1,
+main [class*="st-key-chat_glass_panel"] h1 {
+    color: #111111 !important;
+}
+/* 2c. Right sidebar panel: light; same height as chat panel */
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"],
 main [class*="st-key-right_sidebar_panel"] {
-    background: rgba(42, 50, 66, 0.62) !important;
-    background-color: rgba(42, 50, 66, 0.62) !important;
-    backdrop-filter: blur(8px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+    background: #fafafa !important;
+    background-color: #fafafa !important;
     border-radius: 12px 0 0 12px !important;
-    border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-    padding: 1.25rem 0.95rem 3rem 0.95rem !important;
+    border-left: 1px solid #d0d0d0 !important;
+    padding: 1.25rem 0.95rem 1.35rem 0.95rem !important;
     margin-top: 0.25rem !important;
     height: calc(100vh - 0.65rem) !important;
     max-height: calc(100vh - 0.65rem) !important;
     min-height: 0 !important;
-    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: -2px 0 12px rgba(0, 0, 0, 0.05) !important;
     margin-right: 0 !important;
     overflow-y: auto !important;
     overflow-x: visible !important;
     box-sizing: border-box !important;
     width: 100% !important;
     max-width: 100% !important;
+}
+/* Space above End workflow ≈ space below (panel bottom padding) */
+[data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_end_actions"],
+main [class*="st-key-right_sidebar_end_actions"] {
+    margin-top: 1.35rem !important;
 }
 /* Flowchart markdown: allow slight horizontal overflow so labels are not clipped in a narrow column */
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"],
@@ -207,26 +287,26 @@ main [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] {
 main [class*="st-key-right_sidebar_panel"] label,
 main [class*="st-key-right_sidebar_panel"] p,
 main [class*="st-key-right_sidebar_panel"] span {
-    color: #fff !important;
+    color: #111111 !important;
     font-weight: 500 !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] p,
 main [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] p {
-    color: #fff !important;
+    color: #111111 !important;
     font-weight: 500 !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] p,
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] span,
 main [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] p,
 main [class*="st-key-right_sidebar_panel"] [data-testid="stAlert"] span {
-    color: #fff !important;
+    color: #111111 !important;
     font-weight: 500 !important;
 }
 /* Right sidebar: minimal gap before Flowchart (after divider) */
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] hr,
 main [class*="st-key-right_sidebar_panel"] hr {
     margin: 0.4rem 0 0.35rem 0 !important;
-    border-color: rgba(255,255,255,0.2) !important;
+    border-color: #cccccc !important;
 }
 /* Compact right sidebar: less spacing so content fits without scroll */
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stVerticalBlock"] > div,
@@ -245,12 +325,12 @@ main [class*="st-key-right_sidebar_panel"] [data-testid="stMarkdown"] h4 {
     margin-top: 0.35rem !important;
     margin-bottom: 0.25rem !important;
     font-size: 0.95rem !important;
-    color: #fff !important;
+    color: #111111 !important;
     font-weight: 600 !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stProgress"] span,
 main [class*="st-key-right_sidebar_panel"] [data-testid="stProgress"] span {
-    color: #fff !important;
+    color: #111111 !important;
     font-weight: 500 !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-right_sidebar_panel"] [data-testid="stProgress"],
@@ -311,47 +391,48 @@ main [class*="st-key-chat_area"] > div:nth-child(even) {
     align-self: flex-end !important;
     margin-left: auto !important;
 }
-/* 3. Message bubbles: theme-matching translucent blue-purple (fits chat panel) */
+/* 3. Message bubbles: light gray, black text */
 [data-testid="stChatMessage"] {
     border-radius: 1rem;
     padding: 0.6rem 1rem;
     max-width: 82%;
     width: fit-content !important;
     margin-bottom: 0.5rem;
-    background: rgba(235, 238, 255, 0.45) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.35) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: #f0f0f0 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    border: 1px solid #d8d8d8 !important;
+    color: #111111 !important;
 }
-/* 4. AI/assistant: left, pink text, theme-matching bubble */
+/* 4. AI/assistant: left */
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
-    background: rgba(232, 230, 255, 0.5) !important;
-    color: #c71585 !important;
+    background: #f5f5f5 !important;
+    color: #111111 !important;
     align-self: flex-start !important;
     margin-right: auto !important;
     margin-left: 0 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.35) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    border: 1px solid #d0d0d0 !important;
 }
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) p,
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) [data-testid="stMarkdownContainer"],
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) div,
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) li {
-    color: #c71585 !important;
+    color: #111111 !important;
 }
-/* 5. User: right, blue text, theme-matching bubble */
+/* 5. User: right — slightly different tint, same black text */
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
-    background: rgba(225, 235, 255, 0.5) !important;
-    color: #1a5fb4 !important;
+    background: #ebebeb !important;
+    color: #111111 !important;
     align-self: flex-end !important;
     margin-left: auto !important;
     margin-right: 0 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.35) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    border: 1px solid #d0d0d0 !important;
 }
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) p,
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) [data-testid="stMarkdownContainer"],
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) div {
-    color: #1a5fb4 !important;
+    color: #111111 !important;
 }
 /* 6. Caption and spans/links */
 [data-testid="stChatMessage"] [data-testid="stCaptionContainer"],
@@ -363,7 +444,7 @@ main [class*="st-key-chat_area"] > div:nth-child(even) {
 [data-testid="stChatMessage"] a {
     color: inherit !important;
 }
-/* 6b. Tools used: inside AI bubble, small bold white text */
+/* 6b. Tools used: small bold dark text */
 .tools-used-line,
 [data-testid="stAppViewContainer"] .tools-used-line,
 main .tools-used-line {
@@ -373,7 +454,7 @@ main .tools-used-line {
 }
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) .tools-used-line,
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) .tools-used-line strong {
-    color: #fff !important;
+    color: #111111 !important;
 }
 .tools-used-line strong,
 main .tools-used-line strong {
@@ -403,7 +484,7 @@ main [class*="st-key-thinking_slot"] {
     0%, 60%, 100% { transform: translateY(0); }
     30% { transform: translateY(-4px); }
 }
-/* 7. Message box (chat input): clearly visible – more opaque gray + gloss, multiple selectors */
+/* 7. Message box (chat input): white / light gray, black text */
 [data-testid="stAppViewContainer"] [data-testid="stChatInput"],
 main [data-testid="stChatInput"],
 [data-testid="stAppViewContainer"] .stChatInputContainer,
@@ -412,10 +493,11 @@ main .stChatInputContainer,
 main .stChatInputContainer > div,
 [data-testid="stAppViewContainer"] div[class*="stChatInput"],
 main div[class*="stChatInput"] {
-    background: rgba(200, 200, 212, 0.85) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+    background: #f7f7f7 !important;
+    box-shadow: none !important;
     border-radius: 1rem !important;
-    border: 1px solid rgba(180,180,190,0.6) !important;
+    border: 1px solid #c8c8c8 !important;
+    color: #111111 !important;
 }
 [data-testid="stChatInput"] textarea,
 [data-testid="stChatInput"] input,
@@ -423,24 +505,33 @@ main div[class*="stChatInput"] {
 div[class*="stChatInput"] textarea,
 div[class*="stChatInput"] input {
     background: transparent !important;
-    color: inherit !important;
+    color: #111111 !important;
 }
-/* 8. Model provider (selectbox): same visible style – more opaque gray + gloss */
+/* 8. Model provider (selectbox): light, black text */
 [data-testid="stAppViewContainer"] .block-container [data-testid="stSelectbox"],
 main .block-container [data-testid="stSelectbox"],
 [data-testid="stAppViewContainer"] .block-container [data-testid="stSelectbox"] > div,
 main .block-container [data-testid="stSelectbox"] > div,
 [data-testid="stAppViewContainer"] .block-container div[class*="stSelectbox"],
 main .block-container div[class*="stSelectbox"] {
-    background: rgba(200, 200, 212, 0.85) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+    background: #f7f7f7 !important;
+    box-shadow: none !important;
     border-radius: 1rem !important;
-    border: 1px solid rgba(180,180,190,0.6) !important;
+    border: 1px solid #c8c8c8 !important;
+    color: #111111 !important;
 }
 main .block-container [data-testid="stSelectbox"] [class*="control"],
 main .block-container div[class*="stSelectbox"] [class*="control"] {
     background: transparent !important;
     border: none !important;
+    color: #111111 !important;
+}
+/* Secondary buttons in main chat (e.g. View products) */
+[data-testid="stAppViewContainer"] [class*="st-key-view_products_buttons"] .stButton > button,
+main [class*="st-key-view_products_buttons"] .stButton > button {
+    background-color: #e8e8e8 !important;
+    color: #111111 !important;
+    border: 1px solid #c8c8c8 !important;
 }
 /* Chat header row: align title and model provider dropdown on same baseline */
 [data-testid="stAppViewContainer"] [class*="st-key-chat_glass_panel"] [data-testid="stHorizontalBlock"]:first-of-type,
@@ -503,6 +594,7 @@ main [class*="st-key-chat_glass_panel"] [data-testid="stHorizontalBlock"]:first-
     font-size: 0.8rem !important;
     padding: 0.15rem 0.4rem !important;
     white-space: nowrap !important;
+    color: #111111 !important;
 }
 [data-testid="stAppViewContainer"] [class*="st-key-chat_glass_panel"] [data-testid="stHorizontalBlock"]:first-of-type [data-testid="stSelectbox"] [role="listbox"],
 main [class*="st-key-chat_glass_panel"] [data-testid="stHorizontalBlock"]:first-of-type [data-testid="stSelectbox"] [role="listbox"],
@@ -590,11 +682,14 @@ def page_chatting():
             # Step 2. Chat area (messages, buttons, thinking, input)
             with st.container(key="chat_area"):
                 # Chat history (assistant/user for bubble styling)
-                for message in st.session_state.messages:
+                for i, message in enumerate(st.session_state.messages):
                     role = message.get("role") or "assistant"
                     streamlit_role = "user" if (role.strip().lower() == "human") else "assistant"
                     with st.chat_message(streamlit_role):
                         st.write(message.get("content") or "")
+                        embed = message.get("products_chat_embed")
+                        if embed:
+                            render_products_chat_embed(embed, key_suffix=str(i))
                         activity = message.get("activity")
                         if activity:
                             st.markdown(
@@ -604,56 +699,9 @@ def page_chatting():
                                 unsafe_allow_html=True,
                             )
 
-                # Step 2b. "View products" / "View selected products" buttons (open modals via workflow ui); stacked vertically, left-aligned
-                workflow = st.session_state.get("workflow")
-                if workflow and workflow.get("name") == WorkFlows.WORKFLOW_PPR.value:
-                    from src.workflows.workflow_ppr.ui.support import (
-                        _has_product_data,
-                        _has_selected_products,
-                    )
-                    has_rec = _has_product_data()
-                    has_sel = _has_selected_products()
-                    if has_rec or has_sel:
-                        with st.container(key="view_products_buttons"):
-                            if has_rec and has_sel:
-                                if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
-                                    st.session_state.show_selected_products_modal = True
-                                    st.rerun()
-                                if st.button("View recommended products", type="secondary", key="view_products_btn"):
-                                    st.session_state.show_products_modal = True
-                                    st.rerun()
-                            elif has_sel:
-                                if st.button("View selected products", type="secondary", key="view_selected_products_btn"):
-                                    st.session_state.show_selected_products_modal = True
-                                    st.rerun()
-                            elif has_rec:
-                                if st.button("View recommended products", type="secondary", key="view_products_btn"):
-                                    st.session_state.show_products_modal = True
-                                    st.rerun()
-                elif workflow and workflow.get("name") == WorkFlows.WORKFLOW_IPR.value:
-                    from src.workflows.workflow_ipr.ui.support import (
-                        _has_product_data,
-                        _has_selected_products,
-                    )
-                    has_rec = _has_product_data()
-                    has_sel = _has_selected_products()
-                    if has_rec or has_sel:
-                        with st.container(key="view_products_buttons"):
-                            if has_rec and has_sel:
-                                if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
-                                    st.session_state.show_selected_products_modal = True
-                                    st.rerun()
-                                if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
-                                    st.session_state.show_products_modal = True
-                                    st.rerun()
-                            elif has_sel:
-                                if st.button("View selected products", type="secondary", key="view_selected_products_btn_ipr"):
-                                    st.session_state.show_selected_products_modal = True
-                                    st.rerun()
-                            elif has_rec:
-                                if st.button("View recommended products", type="secondary", key="view_products_btn_ipr"):
-                                    st.session_state.show_products_modal = True
-                                    st.rerun()
+                # Step 2b. One-time deck download (PPR/IPR) below chat; hidden after download or next user message
+                with st.container(key="chat_deck_slot"):
+                    render_chat_deck_download_if_ready()
 
                 # Step 3. While AI is generating: show "Thinking..." (input stays visible below, disabled)
                 generation_in_progress = st.session_state.get("generation_in_progress", False)
@@ -712,6 +760,7 @@ def page_chatting():
                     return
 
                 if human_message:
+                    dismiss_chat_deck_offer_if_deck_ready()
                     st.chat_message("user").write(human_message)
                     st.session_state.messages.append({"role": "Human", "content": human_message})
                     st.session_state.generation_in_progress = True

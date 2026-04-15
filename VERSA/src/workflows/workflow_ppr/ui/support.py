@@ -65,9 +65,8 @@ def _escape_markdown_cell(s: str) -> str:
     return s.replace("\\", "\\\\").replace("|", "\\|")
 
 
-@st.dialog("Selected product list", width="large", dismissible=True, on_dismiss=_clear_selected_products_modal_flag)
-def show_selected_products_modal():
-    """Modal showing the current shopping list (selected products). Same data as sidebar."""
+def render_ppr_selected_products_panel() -> None:
+    """Shopping list (selected products); used in sidebar tab and modal."""
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -80,7 +79,6 @@ def show_selected_products_modal():
     st.write("**Selected product list**")
     has_url = "URL" in shopping_list.columns and "ITEM_NAME" in shopping_list.columns
     if has_url:
-        # Markdown table so item names are clickable links (like sidebar)
         rows = ["| Item ID | Item name |", "| --- | --- |"]
         for _, row in shopping_list.iterrows():
             item_id = _escape_markdown_cell(str(row.get("ITEM_ID", "")))
@@ -94,9 +92,8 @@ def show_selected_products_modal():
         st.dataframe(df, use_container_width=True)
 
 
-@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
-def show_products_modal():
-    """Modal showing current recommendations / filtered products (same data as Recommendation List tab)."""
+def render_ppr_products_panel() -> None:
+    """Recommendations + full product list; used in sidebar tab and modal."""
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -106,13 +103,15 @@ def show_products_modal():
     all_available_products = getattr(memory, "all_available_products", None)
     filters = getattr(memory, "filters", None) or {}
 
-    if (filtered_products is None or filtered_products.empty) and (
-        all_available_products is None or all_available_products.empty
+    if (filtered_products is None or (hasattr(filtered_products, "empty") and filtered_products.empty)) and (
+        all_available_products is None or (hasattr(all_available_products, "empty") and all_available_products.empty)
     ):
         st.write("No recommendations available yet.")
         return
 
-    if filters and filtered_products is not None and not filtered_products.empty:
+    if filters and filtered_products is not None and not (
+        hasattr(filtered_products, "empty") and filtered_products.empty
+    ):
         st.write("**Recommended products matching your current criteria**")
         for k, v in filters.items():
             st.write(f"* **{k}:** {v}")
@@ -120,11 +119,28 @@ def show_products_modal():
         st.divider()
 
     st.write("**Full list of all products**")
-    st.caption(f"Distributor: {getattr(memory, 'distributor_name', '—')} | Logo: {getattr(memory, 'logo_name', '—')} | Category: {getattr(memory, 'category', '—')}")
-    if all_available_products is not None and not all_available_products.empty:
+    st.caption(
+        f"Distributor: {getattr(memory, 'distributor_name', '—')} | Logo: {getattr(memory, 'logo_name', '—')} | "
+        f"Category: {getattr(memory, 'category', '—')}"
+    )
+    if all_available_products is not None and not (
+        hasattr(all_available_products, "empty") and all_available_products.empty
+    ):
         st.dataframe(all_available_products, use_container_width=True)
     else:
         st.write("No full list available.")
+
+
+@st.dialog("Selected product list", width="large", dismissible=True, on_dismiss=_clear_selected_products_modal_flag)
+def show_selected_products_modal():
+    """Modal showing the current shopping list (selected products). Same data as sidebar."""
+    render_ppr_selected_products_panel()
+
+
+@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
+def show_products_modal():
+    """Modal showing current recommendations / filtered products (same as Products tab)."""
+    render_ppr_products_panel()
 
 
 PPR_PROMPT_SUGGESTIONS = """Try asking:
@@ -145,20 +161,21 @@ PPR_PROMPT_SUGGESTIONS = """Try asking:
 """
 
 
-@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
-def show_params_modal():
-    """Modal showing parameters collected during the conversation."""
+def render_ppr_params_panel() -> None:
+    """Collected parameters; used in sidebar tab and modal."""
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
         return
     memory = workflow["workflow_memory"]
+
     def _to_display(v):
         if v is None or (isinstance(v, float) and pd.isna(v)):
             return None
         if hasattr(v, "item"):
             return v.item()
         return v
+
     params = [
         ("Distributor", _to_display(getattr(memory, "distributor_name", None))),
         ("Logo", _to_display(getattr(memory, "logo_name", None))),
@@ -174,11 +191,22 @@ def show_params_modal():
     st.dataframe(params_df, use_container_width=True, hide_index=True)
 
 
+def render_ppr_prompts_panel() -> None:
+    """Prompt suggestions copy; used in sidebar tab and modal."""
+    st.write("#### Prompt suggestions")
+    st.markdown(PPR_PROMPT_SUGGESTIONS)
+
+
+@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
+def show_params_modal():
+    """Modal showing parameters collected during the conversation."""
+    render_ppr_params_panel()
+
+
 @st.dialog("Prompt suggestions", width="large", dismissible=True, on_dismiss=_clear_prompt_modal_flag)
 def show_prompt_modal():
     """Modal with suggested prompts for the workflow."""
-    st.write("#### Prompt Suggestions")
-    st.markdown(PPR_PROMPT_SUGGESTIONS)
+    render_ppr_prompts_panel()
 
 
 @st.dialog("End workflow?", width="small", dismissible=True, on_dismiss=_clear_end_workflow_confirm_flag)
@@ -199,35 +227,13 @@ def show_end_workflow_confirm_modal():
 
 
 def _recommendation_tab():
-    memory = st.session_state.workflow["workflow_memory"]
-    filtered_products = getattr(memory, "filtered_products", None)
-    all_available_products = getattr(memory, "all_available_products", None)
-    filters = getattr(memory, "filters", None) or {}
+    """Legacy support page tab — same as Products sidebar tab."""
+    render_ppr_products_panel()
 
-    if (filtered_products is None or (hasattr(filtered_products, "empty") and filtered_products.empty)) and (
-        all_available_products is None or (hasattr(all_available_products, "empty") and all_available_products.empty)
-    ):
-        st.write("No recommendations available, please check back later")
-        return
-
-    if filters and filtered_products is not None and not (hasattr(filtered_products, "empty") and filtered_products.empty):
-        st.write("#### Recommended Products Matching Your Current Criteria")
-        filter_string = "\n".join([f"* {k}: {v}" for k, v in filters.items()])
-        st.write(filter_string)
-        with st.expander("See the complete list of products"):
-            st.dataframe(filtered_products)
-        st.divider()
-
-    st.write("#### Full List of All Products:")
-    st.write(f"* Distributor: {getattr(memory, 'distributor_name', '—')}")
-    st.write(f"* Logo: {getattr(memory, 'logo_name', '—')}")
-    st.write(f"* Category: {getattr(memory, 'category', '—')}")
-    with st.expander("See the complete list of products"):
-        st.dataframe(all_available_products)
 
 def _prompt_tab():
-    """Same copy as the sidebar Prompt suggestions modal."""
-    st.markdown(PPR_PROMPT_SUGGESTIONS)
+    """Legacy support page tab."""
+    render_ppr_prompts_panel()
 
 
 def page_support():

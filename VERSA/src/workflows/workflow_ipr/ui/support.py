@@ -88,8 +88,7 @@ IPR_PROMPT_SUGGESTIONS = """Try these in the chat to move the IPR workflow along
 """
 
 
-@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
-def show_params_modal():
+def render_ipr_params_panel() -> None:
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -109,21 +108,18 @@ def show_params_modal():
     st.dataframe(params_df, use_container_width=True, hide_index=True)
 
 
-@st.dialog("Prompt suggestions", width="large", dismissible=True, on_dismiss=_clear_prompt_modal_flag)
-def show_prompt_modal():
-    st.write("#### Prompt Suggestions")
+def render_ipr_prompts_panel() -> None:
+    st.write("#### Prompt suggestions")
     st.markdown(IPR_PROMPT_SUGGESTIONS)
 
 
-@st.dialog("NAICS code list", width="large", dismissible=True, on_dismiss=_clear_naics_modal_flag)
-def show_naics_modal():
+def render_ipr_naics_panel() -> None:
     st.write("#### Full list of NAICS codes")
     df = cache_naics_code()
     st.dataframe(df, use_container_width=True, hide_index=True)
 
 
-@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
-def show_products_modal():
+def render_ipr_products_panel() -> None:
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -151,8 +147,7 @@ def show_products_modal():
         st.write("No full list available.")
 
 
-@st.dialog("Selected product list", width="large", dismissible=True, on_dismiss=_clear_selected_products_modal_flag)
-def show_selected_products_modal():
+def render_ipr_selected_products_panel() -> None:
     workflow = st.session_state.get("workflow")
     if not workflow:
         st.write("No workflow data.")
@@ -176,6 +171,31 @@ def show_selected_products_modal():
     else:
         df = shopping_list[["ITEM_ID", "ITEM_NAME"]].copy() if "ITEM_NAME" in shopping_list.columns else shopping_list
         st.dataframe(df, use_container_width=True)
+
+
+@st.dialog("Parameters collected", width="large", dismissible=True, on_dismiss=_clear_params_modal_flag)
+def show_params_modal():
+    render_ipr_params_panel()
+
+
+@st.dialog("Prompt suggestions", width="large", dismissible=True, on_dismiss=_clear_prompt_modal_flag)
+def show_prompt_modal():
+    render_ipr_prompts_panel()
+
+
+@st.dialog("NAICS code list", width="large", dismissible=True, on_dismiss=_clear_naics_modal_flag)
+def show_naics_modal():
+    render_ipr_naics_panel()
+
+
+@st.dialog("Product recommendations", width="large", dismissible=True, on_dismiss=_clear_products_modal_flag)
+def show_products_modal():
+    render_ipr_products_panel()
+
+
+@st.dialog("Selected product list", width="large", dismissible=True, on_dismiss=_clear_selected_products_modal_flag)
+def show_selected_products_modal():
+    render_ipr_selected_products_panel()
 
 
 @st.dialog("End workflow?", width="small", dismissible=True, on_dismiss=_clear_end_workflow_confirm_flag)

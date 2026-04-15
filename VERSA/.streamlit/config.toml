@@ -1,0 +1,7 @@
+# Light UI: aligns with run.py CHAT_CONTAINER_CSS (white / black text).
+[theme]
+base = "light"
+primaryColor = "#111111"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f4f4"
+textColor = "#111111"

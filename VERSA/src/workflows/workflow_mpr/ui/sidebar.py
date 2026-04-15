@@ -1,7 +1,7 @@
 import streamlit as st
 
 from src.common.provider import SUPPORTED_PROVIDERS
-from .support import _has_product_data
+from .support import render_mpr_params_panel, render_mpr_products_panel, render_mpr_prompts_panel
 
 PROVIDER_LABELS = {"openai": "OpenAI", "anthropic": "Anthropic"}
 
@@ -29,18 +29,11 @@ def page_sidebar():
         on_change=_mpr_sidebar_provider_to_header,
     )
     st.sidebar.divider()
-    st.sidebar.caption("Open in modal")
-    if _has_product_data():
-        if st.sidebar.button("Recommended products", key="mpr_sidebar_products"):
-            st.session_state.show_products_modal = True
-            st.rerun()
-    if st.sidebar.button("Parameters collected", key="mpr_sidebar_params"):
-        st.session_state.show_params_modal = True
-        st.rerun()
-    if st.sidebar.button("Prompt suggestions", key="mpr_sidebar_prompt"):
-        st.session_state.show_prompt_modal = True
-        st.rerun()
-    st.sidebar.divider()
-    if st.sidebar.button("End current workflow", type="primary", key="mpr_sidebar_end"):
-        st.session_state.show_end_workflow_confirm = True
-        st.rerun()
+    st.sidebar.caption("Workflow data (tabs)")
+    tab_products, tab_params, tab_prompts = st.sidebar.tabs(["Products", "Parameters", "Prompts"])
+    with tab_products:
+        render_mpr_products_panel()
+    with tab_params:
+        render_mpr_params_panel()
+    with tab_prompts:
+        render_mpr_prompts_panel()

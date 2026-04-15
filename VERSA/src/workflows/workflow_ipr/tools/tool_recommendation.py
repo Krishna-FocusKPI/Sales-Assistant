@@ -103,7 +103,13 @@ class ProductRecommendation(BaseTool):
         to_next.reset()
         to_next.decision = "SUCCESS"
         to_next.source = self.name
-        to_next.message = f"Sucessfully get the recommendations."
+        n_full = len(all_available_products) if all_available_products is not None else 0
+        to_next.message = (
+            f"Successfully loaded {n_full} product row(s) for category {getattr(memory, 'category', '')!r} "
+            f"(NAICS {getattr(memory, 'naics_code', '')!r}). "
+            "The user sees the **full** recommendation table in the chat after your reply—give a short intro only; "
+            "do not invent SKUs or re-list every line in prose."
+        )
 
         logging.info(f"* Sucessfully get the recommendations.")
         return to_next.message
