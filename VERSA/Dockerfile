@@ -7,11 +7,11 @@ WORKDIR /app
 # install graphviz
 RUN apt-get update && apt-get install -y graphviz
 
-# Copy the requirements file and install dependencies
+# Copy the requirements file and install dependencies (canonical: requirements-agent.txt)
 COPY ./src /app/src
 COPY ./run.py /app/run.py
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY ./requirements-agent.txt /app/requirements-agent.txt
+RUN pip install --no-cache-dir -r requirements-agent.txt
 
 # Default Streamlit secrets (no real keys). Production: VERSA_STREAMLIT_SECRETS_B64 or /.versa/secrets.toml.
 RUN mkdir -p /app/.streamlit /.versa
